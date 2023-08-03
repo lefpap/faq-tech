@@ -1,9 +1,6 @@
 package org.app.faqtech.answer;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.app.faqtech.question.Question;
 import org.app.faqtech.user.User;
@@ -11,9 +8,10 @@ import org.app.faqtech.user.User;
 import java.time.LocalDate;
 
 @Data
-@Entity(name = "answer")
+@Entity(name = "answers")
 public class Answer {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String text;
     private LocalDate createdAt;
