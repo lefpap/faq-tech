@@ -1,9 +1,6 @@
 package org.app.faqtech.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -18,4 +15,7 @@ public class User {
     private String password;
     private String email;
     private String simplePushKey;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
