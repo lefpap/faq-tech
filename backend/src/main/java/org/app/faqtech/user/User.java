@@ -2,6 +2,7 @@ package org.app.faqtech.user;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 
 @Data
 @Entity(name = "users")
@@ -15,6 +16,9 @@ public class User {
     private String password;
     private String email;
     private String simplePushKey;
+
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean active = true;
 
     @Enumerated(EnumType.STRING)
     private Role role;

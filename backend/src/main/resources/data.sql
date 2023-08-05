@@ -1,15 +1,15 @@
-INSERT INTO users (firstname, lastname, username, password, email, role) VALUES
-('Lefteris', 'Papaioannou', 'lefpap', 'monkey', 'lefpap@test.com', 'ADMIN'),
-('John', 'Doe', 'johndoe', 'pass123', 'johndoe@example.com', 'USER'),
-('Jane', 'Smith', 'janesmith', 'pass456', 'janesmith@example.com', 'USER'),
-('Alice', 'Johnson', 'alicej', 'pass789', 'alicej@example.com', 'USER'),
-('Bob', 'Williams', 'bobw', 'pass321', 'bobw@example.com', 'USER'),
-('Charlie', 'Brown', 'charlieb', 'pass654', 'charlieb@example.com', 'USER'),
-('David', 'Davis', 'davidd', 'pass987', 'davidd@example.com', 'USER'),
-('Emily', 'Evans', 'emilye', 'pass135', 'emilye@example.com', 'USER'),
-('Frank', 'Franklin', 'frankf', 'pass246', 'frankf@example.com', 'USER'),
-('Grace', 'Green', 'graceg', 'pass369', 'graceg@example.com', 'USER'),
-('Harry', 'Harrison', 'harryh', 'pass159', 'harryh@example.com', 'USER');
+INSERT INTO users (firstname, lastname, username, password, email, role, active) VALUES
+('Lefteris', 'Papaioannou', 'lefpap', 'monkey', 'lefpap@test.com', 'ADMIN', true),
+('John', 'Doe', 'johndoe', 'pass123', 'johndoe@example.com', 'USER', true),
+('Jane', 'Smith', 'janesmith', 'pass456', 'janesmith@example.com', 'USER', true),
+('Alice', 'Johnson', 'alicej', 'pass789', 'alicej@example.com', 'USER', true),
+('Bob', 'Williams', 'bobw', 'pass321', 'bobw@example.com', 'USER', true),
+('Charlie', 'Brown', 'charlieb', 'pass654', 'charlieb@example.com', 'USER', true),
+('David', 'Davis', 'davidd', 'pass987', 'davidd@example.com', 'USER', true),
+('Emily', 'Evans', 'emilye', 'pass135', 'emilye@example.com', 'USER', true),
+('Frank', 'Franklin', 'frankf', 'pass246', 'frankf@example.com', 'USER', true),
+('Grace', 'Green', 'graceg', 'pass369', 'graceg@example.com', 'USER', true),
+('Harry', 'Harrison', 'harryh', 'pass159', 'harryh@example.com', 'USER', true);
 
 
 INSERT INTO questions (title, text, created_at, user_id) VALUES

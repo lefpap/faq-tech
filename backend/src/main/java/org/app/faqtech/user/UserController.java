@@ -15,8 +15,13 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public List<User> getUsers(@RequestParam(required = false) Boolean active) {
+
+        if ( active == null) {
+            return userService.getUsers();
+        }
+
+        return userService.getUsersByActiveFlag(active);
     }
 
     @GetMapping("/{id}")
@@ -25,10 +30,16 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Long createUser(@RequestBody User userDetails) {
+        return userService.createUser(userDetails);
+    }
 
-    @DeleteMapping("/{id}")
+
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public void deactivateUser(@PathVariable Long id) {
+        userService.softDeleteUser(id);
     }
 }

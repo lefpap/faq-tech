@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.app.faqtech.question.Question;
 import org.app.faqtech.user.User;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.time.LocalDate;
 

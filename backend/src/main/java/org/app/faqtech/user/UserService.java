@@ -1,6 +1,7 @@
 package org.app.faqtech.user;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,11 @@ public class UserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
+
+    public List<User> getUsersByActiveFlag(boolean flag) {
+        return flag ? userRepository.findByActiveTrue() : userRepository.findByActiveFalse();
+    }
+
 
     public User getUserById(Long id) {
         return userRepository.findById(id)
@@ -40,7 +46,8 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
-    public void deleteUser(Long id) {
+    @Transactional
+    public void softDeleteUser(Long id) {
         User foundUser = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -48,6 +55,6 @@ public class UserService {
             throw new UnauthorizedActionException("Can't delete an admin user");
         }
 
-        userRepository.delete(foundUser);
+        userRepository.softDelete(foundUser.getId());
     }
 }
