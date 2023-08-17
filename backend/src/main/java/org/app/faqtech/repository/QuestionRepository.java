@@ -1,5 +1,6 @@
-package org.app.faqtech.question;
+package org.app.faqtech.repository;
 
+import org.app.faqtech.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,10 +1,11 @@
-package org.app.faqtech.question;
+package org.app.faqtech.service;
 
+import org.app.faqtech.entity.Question;
+import org.app.faqtech.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class QuestionService {

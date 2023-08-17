@@ -1,8 +1,12 @@
-package org.app.faqtech.user;
+package org.app.faqtech.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.app.faqtech.entity.Role;
+import org.app.faqtech.entity.User;
+import org.app.faqtech.exception.UnauthorizedActionException;
+import org.app.faqtech.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

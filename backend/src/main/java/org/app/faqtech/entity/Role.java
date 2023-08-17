@@ -1,4 +1,4 @@
-package org.app.faqtech.user;
+package org.app.faqtech.entity;
 
 public enum Role {
 

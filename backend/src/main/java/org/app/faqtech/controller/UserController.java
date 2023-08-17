@@ -1,6 +1,8 @@
-package org.app.faqtech.user;
+package org.app.faqtech.controller;
 
 import lombok.AllArgsConstructor;
+import org.app.faqtech.entity.User;
+import org.app.faqtech.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

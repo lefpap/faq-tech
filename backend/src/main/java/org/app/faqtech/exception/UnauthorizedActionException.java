@@ -1,4 +1,4 @@
-package org.app.faqtech.user;
+package org.app.faqtech.exception;
 
 public class UnauthorizedActionException extends RuntimeException {
     public UnauthorizedActionException(String message) {
