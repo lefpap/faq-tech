@@ -1,12 +1,15 @@
-package org.app.faqtech.security;
+package org.app.faqtech.security.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.userdetails.User;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.app.faqtech.security.SecurityConstants;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -15,12 +18,13 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "hTuKYEYtdPMEwxqnD08WZ6GEvQnRco0u";
+    private static final String SECRET_KEY = "Mm1yM0pUa0NlanJtblN3dmFyM3d4YUJqYjRoQ2xxSDU=";
 
     private Claims extractAllClaims(String token) {
         return Jwts
-            .parser()
-            .setSigningKey(SECRET_KEY)
+            .parserBuilder()
+            .setSigningKey(getSignKey())
+            .build()
             .parseClaimsJws(token)
             .getBody();
     }
@@ -39,13 +43,12 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails, Map<String, Object> extraClaims) {
-        return Jwts
-            .builder()
-            .setClaims(extraClaims)
+        return Jwts.builder()
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.TOKEN_EXPIRATION_TIME))
-            .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+            .signWith(getSignKey(), SignatureAlgorithm.HS256)
+            .addClaims(extraClaims)
             .compact();
     }
 
@@ -62,5 +65,9 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
+    private Key getSignKey() {
+        byte[] key = Decoders.BASE64.decode(SECRET_KEY);
+        return Keys.hmacShaKeyFor(key);
+    }
 
 }
