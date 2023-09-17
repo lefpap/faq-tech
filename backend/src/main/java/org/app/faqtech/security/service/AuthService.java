@@ -1,15 +1,20 @@
 package org.app.faqtech.security.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.app.faqtech.dto.AuthResponse;
-import org.app.faqtech.dto.LoginRequest;
-import org.app.faqtech.dto.RegisterRequest;
+import org.app.faqtech.dto.auth.AuthResponse;
+import org.app.faqtech.dto.auth.ChangeCredentialsRequest;
+import org.app.faqtech.dto.auth.LoginRequest;
+import org.app.faqtech.dto.auth.RegisterRequest;
 import org.app.faqtech.entity.Role;
 import org.app.faqtech.entity.User;
+import org.app.faqtech.exception.ConflictException;
+import org.app.faqtech.exception.UnauthorizedActionException;
 import org.app.faqtech.repository.UserRepository;
-import org.app.faqtech.security.service.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,6 +42,47 @@ public class AuthService {
         userRepository.save(user);
 
         String token = jwtService.generateToken(user.getUserDetails());
+        return new AuthResponse(token);
+    }
+
+    public AuthResponse changeCredentials(ChangeCredentialsRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
+        User currentUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new EntityNotFoundException("Authenticated user not found"));
+
+        // Verify the current password
+        if (!passwordEncoder.matches(request.currentPassword(), currentUser.getPassword())) {
+            throw new UnauthorizedActionException("Current password is incorrect.");
+        }
+
+        // Update password if provided
+        if (request.newPassword() != null && !request.newPassword().isEmpty()) {
+            currentUser.setPassword(passwordEncoder.encode(request.newPassword()));
+        }
+
+        // Update username if provided and ensure it's unique
+        if (request.newUsername() != null && !request.newUsername().isEmpty()) {
+            boolean existsByUsername = userRepository.existsByUsername(request.newUsername());
+            if (existsByUsername) {
+                throw new ConflictException("Username already exists.");
+            }
+            currentUser.setUsername(request.newUsername());
+        }
+
+        // Update email if provided and ensure it's unique
+        if (request.newEmail() != null && !request.newEmail().isEmpty()) {
+            boolean existsByEmail = userRepository.existsByEmail(request.newEmail());
+            if (existsByEmail) {
+                throw new ConflictException("Email already exists.");
+            }
+            currentUser.setEmail(request.newEmail());
+        }
+
+        userRepository.save(currentUser);
+
+        String token = jwtService.generateToken(currentUser.getUserDetails());
         return new AuthResponse(token);
     }
 

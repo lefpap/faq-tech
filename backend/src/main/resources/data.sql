@@ -1,15 +1,15 @@
 INSERT INTO users (firstname, lastname, username, password, email, role, active) VALUES
-('Lefteris', 'Papaioannou', 'lefpap', 'monkey', 'lefpap@test.com', 'ADMIN', true),
-('John', 'Doe', 'johndoe', 'pass123', 'johndoe@example.com', 'USER', true),
-('Jane', 'Smith', 'janesmith', 'pass456', 'janesmith@example.com', 'USER', true),
-('Alice', 'Johnson', 'alicej', 'pass789', 'alicej@example.com', 'USER', true),
-('Bob', 'Williams', 'bobw', 'pass321', 'bobw@example.com', 'USER', true),
-('Charlie', 'Brown', 'charlieb', 'pass654', 'charlieb@example.com', 'USER', true),
-('David', 'Davis', 'davidd', 'pass987', 'davidd@example.com', 'USER', true),
-('Emily', 'Evans', 'emilye', 'pass135', 'emilye@example.com', 'USER', true),
-('Frank', 'Franklin', 'frankf', 'pass246', 'frankf@example.com', 'USER', true),
-('Grace', 'Green', 'graceg', 'pass369', 'graceg@example.com', 'USER', true),
-('Harry', 'Harrison', 'harryh', 'pass159', 'harryh@example.com', 'USER', true);
+('Lefteris', 'Papaioannou', 'lefpap', '$2a$10$BUxi1A6PxQCDn79fTB4qsO7yvn3SoSHhmEcS8RILypqKhJjLfnzy2', 'lefpap@test.com', 'ADMIN', true),
+('John', 'Doe', 'johndoe', '$2a$10$tQallNTGFQcFqvIz0coMgui5241.fvKM0G0TGbEiN1QxH1/.7Vkza', 'johndoe@example.com', 'USER', true),
+('Jane', 'Smith', 'janesmith', '$2a$10$tQallNTGFQcFqvIz0coMgui5241.fvKM0G0TGbEiN1QxH1/.7Vkza', 'janesmith@example.com', 'USER', true),
+('Alice', 'Johnson', 'alicej', '$2a$10$tQallNTGFQcFqvIz0coMgui5241.fvKM0G0TGbEiN1QxH1/.7Vkza', 'alicej@example.com', 'USER', true),
+('Bob', 'Williams', 'bobw', '$2a$10$tQallNTGFQcFqvIz0coMgui5241.fvKM0G0TGbEiN1QxH1/.7Vkza', 'bobw@example.com', 'USER', true),
+('Charlie', 'Brown', 'charlieb', '$2a$10$tQallNTGFQcFqvIz0coMgui5241.fvKM0G0TGbEiN1QxH1/.7Vkza', 'charlieb@example.com', 'USER', true),
+('David', 'Davis', 'davidd', '$2a$10$tQallNTGFQcFqvIz0coMgui5241.fvKM0G0TGbEiN1QxH1/.7Vkza', 'davidd@example.com', 'USER', true),
+('Emily', 'Evans', 'emilye', 'pass133', 'emilye@example.com', 'USER', true),
+('Frank', 'Franklin', 'frankf', '$2a$10$tQallNTGFQcFqvIz0coMgui5241.fvKM0G0TGbEiN1QxH1/.7Vkza', 'frankf@example.com', 'USER', true),
+('Grace', 'Green', 'graceg', '$2a$10$tQallNTGFQcFqvIz0coMgui5241.fvKM0G0TGbEiN1QxH1/.7Vkza', 'graceg@example.com', 'USER', true),
+('Harry', 'Harrison', 'harryh', '$2a$10$tQallNTGFQcFqvIz0coMgui5241.fvKM0G0TGbEiN1QxH1/.7Vkza', 'harryh@example.com', 'USER', true);
 
 
 INSERT INTO questions (title, text, created_at, user_id) VALUES

@@ -1,7 +1,8 @@
 package org.app.faqtech.controller;
 
 import lombok.AllArgsConstructor;
-import org.app.faqtech.entity.User;
+import org.app.faqtech.dto.user.GetUserResponse;
+import org.app.faqtech.dto.user.UpdateUserRequest;
 import org.app.faqtech.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,31 +18,25 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getUsers(@RequestParam(required = false) Boolean active) {
-
-        if ( active == null) {
-            return userService.getUsers();
-        }
-
-        return userService.getUsersByActiveFlag(active);
+    public List<GetUserResponse> getUsers() {
+        return GetUserResponse.fromUsers(userService.getUsers());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public User getUser(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public GetUserResponse getUser() {
+        return GetUserResponse.fromUser(userService.getLoggedInUser());
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Long createUser(@RequestBody User userDetails) {
-        return userService.createUser(userDetails);
+    @PutMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateLoggedInUser(@RequestBody UpdateUserRequest userRequest) {
+        userService.updateLoggedInUser(userRequest);
     }
 
-
-    @PatchMapping("/{id}")
+    @DeleteMapping("/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deactivateUser(@PathVariable Long id) {
-        userService.softDeleteUser(id);
+    public void softDeleteLoggedInUser() {
+        userService.softDeleteLoggedInUser();
     }
 }

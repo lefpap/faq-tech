@@ -1,9 +1,10 @@
 package org.app.faqtech.security;
 
 import lombok.RequiredArgsConstructor;
-import org.app.faqtech.dto.AuthResponse;
-import org.app.faqtech.dto.LoginRequest;
-import org.app.faqtech.dto.RegisterRequest;
+import org.app.faqtech.dto.auth.AuthResponse;
+import org.app.faqtech.dto.auth.ChangeCredentialsRequest;
+import org.app.faqtech.dto.auth.LoginRequest;
+import org.app.faqtech.dto.auth.RegisterRequest;
 import org.app.faqtech.security.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -29,5 +30,11 @@ public class AuthController {
             @RequestBody LoginRequest request
     ) {
         return authService.authenticate(request);
+    }
+
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthResponse changeCredentials(@RequestBody ChangeCredentialsRequest request) {
+        return authService.changeCredentials(request);
     }
 }
