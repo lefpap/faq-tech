@@ -1,0 +1,49 @@
+.question-text {
+  position: relative;
+  max-height: 10rem;
+  overflow: hidden;
+  padding-right: 1rem;
+}
+
+.question-text::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2rem; /* Height of the fade effect */
+  background: linear-gradient(transparent, var(--bs-body-bg));
+}
+
+/* Custom scrollbar styles for Webkit browsers */
+.scrollable-questions::-webkit-scrollbar {
+  width: 8px; /* Adjust width */
+}
+
+.scrollable-questions::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the scroll thumb */
+  border-radius: 4px; /* Roundness of the scroll thumb */
+}
+
+.scrollable-questions::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Color of the scroll thumb on hover */
+}
+
+/* Custom scrollbar styles for Firefox */
+.scrollable-questions {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f5f5f5; /* thumb and track color */
+}
+
+.sticky-form {
+  position: sticky;
+  top: 1rem; /* Adjust based on your preference */
+}
+
+/* Styles for medium-sized screens and up */
+@media (min-width: 992px) {
+  .scrollable-questions {
+    max-height: 80vh; /* Adjust based on your preference */
+    overflow-y: auto;
+  }
+}

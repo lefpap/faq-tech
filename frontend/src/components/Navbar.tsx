@@ -1,16 +1,13 @@
-import React from "react";
-import { Navbar, Nav, Container, Dropdown, Image, Form } from "react-bootstrap";
+import { Navbar, Nav, Container, Dropdown, Form } from "react-bootstrap";
 import { SunFill, MoonFill } from "react-bootstrap-icons";
 import { useTheme } from "../contexts/ThemeContext";
 
 function NavBar() {
   const { theme, toggleTheme } = useTheme();
 
-  console.log(theme);
-
   return (
-    <Navbar expand="lg" bg={theme}>
-      <Container>
+    <Navbar expand="md" bg={theme}>
+      <Container fluid="sm">
         <Navbar.Brand className="fw-bold fs-3" href="#home">
           FAQTech.
         </Navbar.Brand>
@@ -24,6 +21,17 @@ function NavBar() {
           </Nav>
 
           <Nav.Item className="d-flex align-items-center justify-content-center gap-3">
+            <Dropdown drop="down-centered">
+              <Dropdown.Toggle className="d-flex align-items-center gap-1" variant={theme} id="dropdown-basic">
+                <Navbar.Text>Lefteris Pap.</Navbar.Text>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item href="#/profile">Profile</Dropdown.Item>
+                <Dropdown.Item href="#/logout">Logout</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
             <Form.Check
               type="switch"
               id="custom-switch"
@@ -32,19 +40,6 @@ function NavBar() {
               onChange={toggleTheme}
               reverse
             />
-            <Dropdown drop="down-centered">
-              <Dropdown.Toggle className="d-flex align-items-center gap-3" variant={theme} id="dropdown-basic">
-                <div className="d-inline-flex align-items-center gap-2">
-                  <Navbar.Text>Lefteris Pap.</Navbar.Text>
-                  <Image width={30} src="/src/assets/react.svg" />
-                </div>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item href="#/profile">Profile</Dropdown.Item>
-                <Dropdown.Item href="#/logout">Logout</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
           </Nav.Item>
         </Navbar.Collapse>
       </Container>
