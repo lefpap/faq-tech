@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import LoginPage from "./pages/LoginPage";
 import QuestionDetailsPage from "./pages/QuestionDetailsPage";
 import ProtectedPage from "./pages/ProtectedPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const client = new QueryClient();
 
@@ -55,6 +56,16 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/profile",
+    element: <ProtectedPage />,
+    children: [
+      {
+        index: true,
+        element: <ProfilePage />,
+      },
+    ],
   },
 ]);
 

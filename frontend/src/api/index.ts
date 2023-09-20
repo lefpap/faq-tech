@@ -38,8 +38,4 @@ instance.interceptors.response.use(
   }
 );
 
-// Optional: Add request and response interceptors if needed
-// instance.interceptors.request.use(...);
-// instance.interceptors.response.use(...);
-
 export default instance;
