@@ -8,8 +8,6 @@ export const loginUser = async (credentials: TCredentials) => {
       username,
       password,
     });
-    const token = response.data.token;
-    localStorage.setItem("token", token);
     return response.data;
   } catch (error) {
     throw error;

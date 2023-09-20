@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import QuestionDetailsPage from "./pages/QuestionDetailsPage";
 import ProtectedPage from "./pages/ProtectedPage";
 import ProfilePage from "./pages/ProfilePage";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const client = new QueryClient();
 
@@ -44,6 +45,16 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "/profile",
+        element: <ProtectedPage />,
+        children: [
+          {
+            index: true,
+            element: <ProfilePage />,
+          },
+        ],
+      },
+      {
         path: "about",
         element: <AboutPage />,
       },
@@ -57,22 +68,14 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LoginPage />,
   },
-  {
-    path: "/profile",
-    element: <ProtectedPage />,
-    children: [
-      {
-        index: true,
-        element: <ProfilePage />,
-      },
-    ],
-  },
 ]);
 
 function App() {
   return (
     <QueryClientProvider client={client}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

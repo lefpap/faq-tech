@@ -8,7 +8,6 @@ import { fetchQuestions } from "../api/questions";
 
 function QuestionBrowserPage() {
   const { data: questions, isLoading, isError } = useQuery("questions", fetchQuestions);
-  console.log(questions);
   if (isLoading) {
     return <div>Loading...</div>;
   }
