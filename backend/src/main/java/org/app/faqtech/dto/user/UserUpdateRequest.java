@@ -5,7 +5,7 @@ import org.app.faqtech.entity.User;
 import java.util.Optional;
 import java.util.UUID;
 
-public record UpdateUserRequest(
+public record UserUpdateRequest(
         String firstname,
         String lastname,
         String simplePushKey

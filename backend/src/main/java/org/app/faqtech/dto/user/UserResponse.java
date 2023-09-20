@@ -5,7 +5,7 @@ import org.app.faqtech.entity.User;
 
 import java.util.List;
 
-public record GetUserResponse(
+public record UserResponse(
         Long id,
         String firstname,
         String lastname,
@@ -16,8 +16,8 @@ public record GetUserResponse(
         Role role
 ) {
 
-    public static GetUserResponse fromUser(User user) {
-        return new GetUserResponse(
+    public static UserResponse fromUser(User user) {
+        return new UserResponse(
                 user.getId(),
                 user.getFirstname(),
                 user.getLastname(),
@@ -29,9 +29,9 @@ public record GetUserResponse(
         );
     }
 
-    public static List<GetUserResponse> fromUsers(List<User> users) {
+    public static List<UserResponse> fromUsers(List<User> users) {
         return users.stream()
-                .map(GetUserResponse::fromUser)
+                .map(UserResponse::fromUser)
                 .toList();
     }
 }

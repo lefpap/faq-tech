@@ -1,18 +1,14 @@
 package org.app.faqtech.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.app.faqtech.context.AuthContext;
-import org.app.faqtech.dto.user.UpdateUserRequest;
+import org.app.faqtech.dto.user.UserUpdateRequest;
 import org.app.faqtech.entity.User;
 import org.app.faqtech.repository.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +25,7 @@ public class UserService {
         return authContext.getLoggedInUser();
     }
 
-    public void updateLoggedInUser(UpdateUserRequest userRequest) {
+    public void updateLoggedInUser(UserUpdateRequest userRequest) {
         // Get updated user
         User user = userRequest.updateUser(authContext.getLoggedInUser());
         // Save to db
@@ -39,7 +35,7 @@ public class UserService {
     @Transactional
     public void softDeleteLoggedInUser() {
         // Empty user details
-        User emptyUser = UpdateUserRequest.emptyUser(authContext.getLoggedInUser());
+        User emptyUser = UserUpdateRequest.emptyUser(authContext.getLoggedInUser());
         // Save to db
         userRepository.save(emptyUser);
     }

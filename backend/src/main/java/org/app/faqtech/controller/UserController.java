@@ -1,8 +1,8 @@
 package org.app.faqtech.controller;
 
 import lombok.AllArgsConstructor;
-import org.app.faqtech.dto.user.GetUserResponse;
-import org.app.faqtech.dto.user.UpdateUserRequest;
+import org.app.faqtech.dto.user.UserResponse;
+import org.app.faqtech.dto.user.UserUpdateRequest;
 import org.app.faqtech.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,19 +18,19 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<GetUserResponse> getUsers() {
-        return GetUserResponse.fromUsers(userService.getUsers());
+    public List<UserResponse> getUsers() {
+        return UserResponse.fromUsers(userService.getUsers());
     }
 
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public GetUserResponse getUser() {
-        return GetUserResponse.fromUser(userService.getLoggedInUser());
+    public UserResponse getUser() {
+        return UserResponse.fromUser(userService.getLoggedInUser());
     }
 
     @PutMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public void updateLoggedInUser(@RequestBody UpdateUserRequest userRequest) {
+    public void updateLoggedInUser(@RequestBody UserUpdateRequest userRequest) {
         userService.updateLoggedInUser(userRequest);
     }
 
