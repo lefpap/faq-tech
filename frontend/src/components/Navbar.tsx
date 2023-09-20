@@ -1,10 +1,53 @@
 import { Navbar, Nav, Container, Dropdown, Form } from "react-bootstrap";
 import { SunFill, MoonFill } from "react-bootstrap-icons";
 import { useTheme } from "../contexts/ThemeContext";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+
+const ProfileDropdown = () => {
+  const { logout, user } = useAuth();
+  const { theme } = useTheme();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/"); // Redirect to home page after logout
+  };
+
+  return (
+    <Dropdown drop="down-centered">
+      <Dropdown.Toggle variant={theme} id="dropdown-basic">
+        <Navbar.Text>{user?.username}</Navbar.Text>
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item as={NavLink} to="/profile">
+          Profile
+        </Dropdown.Item>
+        <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
+
+const AuthButtons = () => {
+  return (
+    <>
+      <Nav.Link as={NavLink} to="/login">
+        Log In
+      </Nav.Link>
+      <Nav.Link as={NavLink} to="/register">
+        Register
+      </Nav.Link>
+    </>
+  );
+};
 
 function NavBar() {
   const { theme, toggleTheme } = useTheme();
+  const { isAuthenticated } = useAuth();
+
+  console.log("Authenticated: " + isAuthenticated);
 
   return (
     <Navbar expand="md" bg={theme}>
@@ -28,20 +71,7 @@ function NavBar() {
           </Nav>
 
           <Nav.Item className="d-flex align-items-center justify-content-center gap-3">
-            <Dropdown drop="down-centered">
-              <Dropdown.Toggle className="d-flex align-items-center gap-1" variant={theme} id="dropdown-basic">
-                <Navbar.Text>Lefteris Pap.</Navbar.Text>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item as={NavLink} to="/profile">
-                  Profile
-                </Dropdown.Item>
-                <Dropdown.Item as={NavLink} to="/logout">
-                  Logout
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            {isAuthenticated ? <ProfileDropdown /> : <AuthButtons />}
 
             <Form.Check
               type="switch"

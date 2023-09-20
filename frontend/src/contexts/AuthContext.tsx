@@ -1,64 +1,96 @@
 import { PropsWithChildren, createContext, useState } from "react";
 import { TCredentials } from "../types/auth";
-import { IUser } from "../types/models";
 import { useMutation } from "react-query";
-import { loginUser } from "../api/auth";
-import { AxiosError } from "axios";
+import { loginUser, registerUser } from "../api/auth";
+import { extractToken, isTokenValid } from "../utils/auth";
 
-type TAPIErrorResponse = {
-  error: string;
-  message: string;
-  path: string;
-  status: number;
-  timestamp: string;
-  trace?: string; // Making this optional in case it's not always present
-};
+interface IAuthState {
+  user: { id: number; username: string; role: string } | null;
+  token: { iat: number; exp: number } | null;
+  isAuthenticated: boolean;
+}
 
-type TLoginResult = {
-  success: boolean;
-  error?: string;
-};
-
-interface IAuthContext {
-  user: IUser | undefined;
-  login: (credentials: TCredentials) => Promise<TLoginResult>;
+interface IAuthContext extends IAuthState {
+  login: (credentials: TCredentials) => Promise<any>;
+  register: (registerData: any) => Promise<any>;
   logout: () => void;
 }
 
-export const AuthContext = createContext<IAuthContext | undefined>(undefined);
+const token = localStorage.getItem("token");
+
+const initialState = {
+  user: null,
+  token: null,
+  isAuthenticated: isTokenValid(token),
+};
+
+export const AuthContext = createContext<IAuthContext | null>(null);
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [user, setUser] = useState<IUser | undefined>(undefined);
+  console.log("valid token: " + isTokenValid(token));
+  const [state, setState] = useState<IAuthState>(initialState);
 
-  const loginMutation = useMutation(loginUser, {
-    onSuccess: (data) => {
-      const token = data.token;
-      localStorage.setItem("token", token);
-
-      setUser({ id: 1, username: "test", firstname: "", lastname: "", email: "", role: "USER" });
-    },
-    onError: (error) => {
-      throw error;
-    },
-  });
+  const loginMutation = useMutation(loginUser);
+  const registerMutation = useMutation(registerUser);
 
   const login = async (credentials: TCredentials) => {
     try {
-      await loginMutation.mutateAsync(credentials);
-      return { success: true };
+      const data = await loginMutation.mutateAsync(credentials);
+      const decoded = extractToken(data.token);
+
+      if (!decoded) {
+        throw new Error("Invalid token");
+      }
+
+      setState({
+        user: {
+          id: decoded.id,
+          username: decoded.sub,
+          role: decoded.role,
+        },
+        token: {
+          iat: decoded.iat,
+          exp: decoded.exp,
+        },
+        isAuthenticated: true,
+      });
+      localStorage.setItem("token", data.token);
     } catch (error) {
-      const axiosError = error as AxiosError<TAPIErrorResponse>;
-      console.log(axiosError);
-      return {
-        success: false,
-        error: axiosError.response?.data.message || "An error occurred",
-      };
+      console.error("Login failed:", error);
+      throw error;
     }
   };
+
+  const register = async (registerData: any) => {
+    try {
+      const data = await registerMutation.mutateAsync(registerData);
+      const decoded = extractToken(data.token);
+      if (!decoded) {
+        throw new Error("Invalid token");
+      }
+      setState({
+        user: {
+          id: decoded.id,
+          username: decoded.sub,
+          role: decoded.role,
+        },
+        token: {
+          iat: decoded.iat,
+          exp: decoded.exp,
+        },
+        isAuthenticated: true,
+      });
+      localStorage.setItem("token", data.token);
+    } catch (error) {
+      console.error("Registration failed:", error);
+      throw error;
+    }
+  };
+
   const logout = () => {
-    setUser(undefined);
+    setState(initialState);
     localStorage.removeItem("token");
   };
 
-  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ ...state, login, logout, register }}>{children}</AuthContext.Provider>;
 };

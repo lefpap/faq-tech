@@ -3,23 +3,26 @@ import { useAuth } from "../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  // Form elements
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<any>(null);
+
+  // Login from auth hook
   const { login } = useAuth();
+
+  // Location and navigate
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await login({ username, password });
-    console.log(result.success);
-    console.log(result?.error);
-    if (result.success) {
+    try {
+      await login({ username, password });
       const from = location.state?.from || "/";
       navigate(from);
-    } else {
-      setError(result?.error);
+    } catch (error) {
+      setError("Access Denied!");
     }
 
     setUsername("");

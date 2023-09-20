@@ -2,6 +2,10 @@ package org.app.faqtech.security.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.app.faqtech.dto.auth.AuthResponse;
 import org.app.faqtech.dto.auth.ChangeCredentialsRequest;
 import org.app.faqtech.dto.auth.LoginRequest;
@@ -40,7 +44,10 @@ public class AuthService {
                 .build();
 
         userRepository.save(user);
-
+        
+         Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("id", user.getId());
+        extraClaims.put("role", user.getRole());
         String token = jwtService.generateToken(user.getUserDetails());
         return new AuthResponse(token);
     }
@@ -82,7 +89,10 @@ public class AuthService {
 
         userRepository.save(currentUser);
 
-        String token = jwtService.generateToken(currentUser.getUserDetails());
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("id", currentUser.getId());
+        extraClaims.put("role", currentUser.getRole());
+        String token = jwtService.generateToken(currentUser.getUserDetails(), extraClaims);
         return new AuthResponse(token);
     }
 
@@ -98,7 +108,10 @@ public class AuthService {
                 .findByUsername(request.username())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        String token = jwtService.generateToken(foundUser.getUserDetails());
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("id", foundUser.getId());
+        extraClaims.put("role", foundUser.getRole());
+        String token = jwtService.generateToken(foundUser.getUserDetails(), extraClaims);
         return new AuthResponse(token);
     }
 }
