@@ -1,15 +1,15 @@
 import { Card, Stack } from "react-bootstrap";
 import { ChatFill } from "react-bootstrap-icons";
 
-export interface QuestionProps {
+interface QuestionProps {
   id: number;
   title: string;
   text: string;
-  user: string;
-  date: string;
+  username: string;
+  createdAt: string;
 }
 
-function Question({ title, text, user, date }: QuestionProps) {
+function Question({ title, text, username, createdAt }: QuestionProps) {
   return (
     <Card className="shadow">
       <Card.Header>
@@ -21,8 +21,8 @@ function Question({ title, text, user, date }: QuestionProps) {
       <Card.Footer>
         <Stack direction="horizontal" className="justify-content-between">
           <Stack>
-            <Card.Title>{user}</Card.Title>
-            <Card.Subtitle className="text-body-secondary">{date}</Card.Subtitle>
+            <Card.Title>{username}</Card.Title>
+            <Card.Subtitle className="text-body-secondary">{createdAt}</Card.Subtitle>
           </Stack>
           <Stack direction="horizontal" gap={2} className="align-items-strech">
             <span>132</span> {/* answer count */}

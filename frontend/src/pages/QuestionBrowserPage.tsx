@@ -3,24 +3,30 @@ import { Plus } from "react-bootstrap-icons";
 import QuestionSearch from "../components/QuestionSearch";
 import TopQuestions from "../components/TopQuestions";
 import QuestionsList from "../components/QuestionList";
+import { useQuery } from "react-query";
+import { fetchQuestions } from "../api/questions";
 
-const sampleQuestions = Array.from({ length: 10 }).map(() => ({
-  id: Math.random(), // or some other unique value
-  title: "Sample Title",
-  text: "Sample Text",
-  user: "Sample User",
-  date: "Sample Date",
-}));
+function QuestionBrowserPage() {
+  const { data: questions, isLoading, isError } = useQuery("questions", fetchQuestions);
+  console.log(questions);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-const topQuestions = sampleQuestions.sort(() => 0.5 - Math.random()).slice(0, 3);
+  if (isError) {
+    return <div>Error fetching data</div>;
+  }
 
-function HomePage() {
+  // For top questions, shuffle and take the first 3
+  const shuffled = questions?.sort(() => 0.5 - Math.random());
+  const topQuestions = shuffled?.slice(0, 3);
+
   return (
     <Container as={`section`} className="my-5">
       <Row className="justify-content-center">
         {/* Questions Column */}
-        <Col xs={12} md={8} lg={7} className="mb-4 mb-lg-0 order-1 order-lg-0">
-          <QuestionsList questions={sampleQuestions} />
+        <Col xs={12} md={8} lg={7} className="mb-4 mb-lg-0 order-1 order-lg-0 mw-">
+          <QuestionsList questions={questions} />
         </Col>
 
         {/* Search and Popular Questions Column */}
@@ -38,4 +44,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default QuestionBrowserPage;

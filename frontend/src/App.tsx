@@ -1,8 +1,14 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppLayout from "./layout/AppLayout";
-import HomePage from "./pages/HomePage";
+import QuestionBrowserPage from "./pages/QuestionBrowserPage";
 import AboutPage from "./pages/AboutPage";
 import HelpPage from "./pages/HelpPage";
+import { QueryClient, QueryClientProvider } from "react-query";
+import LoginPage from "./pages/LoginPage";
+import QuestionDetailsPage from "./pages/QuestionDetailsPage";
+import ProtectedPage from "./pages/ProtectedPage";
+
+const client = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -11,7 +17,30 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: <QuestionBrowserPage />,
+      },
+      {
+        path: "questions",
+        children: [
+          {
+            index: true,
+            element: <QuestionBrowserPage />,
+          },
+          {
+            path: "details/:id",
+            element: <QuestionDetailsPage />,
+          },
+          {
+            path: "new",
+            element: <ProtectedPage />,
+            children: [
+              {
+                index: true,
+                element: <div>Create Question Page</div>,
+              },
+            ],
+          },
+        ],
       },
       {
         path: "about",
@@ -23,10 +52,18 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={client}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 }
 
 export default App;

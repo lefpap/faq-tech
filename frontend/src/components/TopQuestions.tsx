@@ -6,7 +6,7 @@ function TopQuestions({ questions }: QuestionListProps) {
     <Card className="d-none d-lg-block">
       <Card.Header>Top Questions</Card.Header>
       <ListGroup variant="flush">
-        {questions.map((question, index) => (
+        {questions?.map((question, index) => (
           <ListGroup.Item key={index}>{question.title}</ListGroup.Item>
         ))}
       </ListGroup>

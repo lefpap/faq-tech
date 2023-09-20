@@ -1,21 +1,22 @@
 import { Stack } from "react-bootstrap";
-import Question, { QuestionProps } from "./Question";
+import Question from "./Question";
+import { IQuestion } from "../types/models";
 
 export interface QuestionListProps {
-  questions: QuestionProps[];
+  questions: IQuestion[] | undefined;
 }
 
 function QuestionsList({ questions }: QuestionListProps) {
   return (
     <Stack gap={4} className="scrollable-questions">
-      {questions.map((question) => (
+      {questions?.map((question) => (
         <Question
           key={question.id}
           id={question.id}
           title={question.title}
           text={question.text}
-          user={question.user}
-          date={question.date}
+          username={question.user.username}
+          createdAt={question.createdAt}
         />
       ))}
     </Stack>
