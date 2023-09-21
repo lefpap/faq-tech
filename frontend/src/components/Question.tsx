@@ -1,21 +1,23 @@
+import React from "react";
 import { Card, Stack } from "react-bootstrap";
 import { ChatFill } from "react-bootstrap-icons";
 
-interface QuestionProps {
-  id: number;
+interface QuestionProps extends React.HTMLProps<HTMLDivElement> {
+  questionId: number;
   title: string;
   text: string;
   username: string;
   createdAt: string;
+  bodyClass?: string;
 }
 
-function Question({ title, text, username, createdAt }: QuestionProps) {
+function Question({ title, text, username, createdAt, bodyClass, onClick }: QuestionProps) {
   return (
-    <Card className="shadow">
+    <Card as="div" className="shadow" onClick={onClick}>
       <Card.Header>
         <Card.Title>{title}</Card.Title>
       </Card.Header>
-      <Card.Body className="question-text">
+      <Card.Body className={bodyClass}>
         <Card.Text className="text-wrap">{text}</Card.Text>
       </Card.Body>
       <Card.Footer>
