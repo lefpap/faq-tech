@@ -9,6 +9,7 @@ import QuestionDetailsPage from "./pages/QuestionDetailsPage";
 import ProtectedPage from "./pages/ProtectedPage";
 import ProfilePage from "./pages/ProfilePage";
 import { AuthProvider } from "./contexts/AuthContext";
+import RegisterPage from "./pages/RegisterPage";
 
 const client = new QueryClient();
 
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
 ]);
 

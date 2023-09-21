@@ -15,13 +15,14 @@ export const loginUser = async (credentials: TCredentials) => {
 };
 
 export const registerUser = async (userInfo: TRegister) => {
-  const { credentials, firstname, lastname, simplePushKey } = userInfo;
+  const { credentials, firstname, lastname, email, simplePushKey } = userInfo;
   try {
     const response = await axios.post("/auth/register", {
       username: credentials.username,
       password: credentials.password,
       firstname,
       lastname,
+      email,
       simplePushKey,
     });
     return response.data;

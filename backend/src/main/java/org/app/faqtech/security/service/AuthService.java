@@ -41,14 +41,15 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.password()))
                 .simplePushKey(request.simplePushKey())
                 .role(Role.USER)
+                .active(true)
                 .build();
 
         userRepository.save(user);
         
-         Map<String, Object> extraClaims = new HashMap<>();
+        Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("id", user.getId());
         extraClaims.put("role", user.getRole());
-        String token = jwtService.generateToken(user.getUserDetails());
+        String token = jwtService.generateToken(user.getUserDetails(), extraClaims);
         return new AuthResponse(token);
     }
 
