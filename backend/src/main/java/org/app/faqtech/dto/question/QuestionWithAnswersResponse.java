@@ -6,7 +6,7 @@ import org.app.faqtech.entity.Question;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record QuestionResponse(
+public record QuestionWithAnswersResponse(
         Long id,
         String title,
         String text,
@@ -15,8 +15,8 @@ public record QuestionResponse(
         UserResponse user
 ) {
 
-    public static QuestionResponse fromEntity(Question question) {
-        return new QuestionResponse(
+    public static QuestionWithAnswersResponse fromEntity(Question question) {
+        return new QuestionWithAnswersResponse(
                 question.getId(),
                 question.getTitle(),
                 question.getText(),
@@ -26,9 +26,9 @@ public record QuestionResponse(
         );
     }
 
-    public static List<QuestionResponse> fromEntities(List<Question> questions) {
+    public static List<QuestionWithAnswersResponse> fromEntities(List<Question> questions) {
         return questions.stream()
-                .map(QuestionResponse::fromEntity)
+                .map(QuestionWithAnswersResponse::fromEntity)
                 .toList();
     }
 }

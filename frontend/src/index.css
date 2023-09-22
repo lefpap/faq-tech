@@ -53,6 +53,17 @@ body::-webkit-scrollbar-thumb:hover {
   top: 1rem; /* Adjust based on your preference */
 }
 
+.question-item {
+  transition: all 0.3s ease;
+}
+
+.question-item:hover {
+  cursor: pointer;
+  transform: scale(0.99);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--bs-secondary);
+}
+
 /* Styles for large-sized screens and up */
 @media (min-width: 992px) {
   .scrollable-questions {

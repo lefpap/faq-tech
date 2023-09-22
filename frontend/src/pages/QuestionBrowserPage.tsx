@@ -1,6 +1,6 @@
 import { Button, Col, Container, Row, Stack } from "react-bootstrap";
 import { Plus } from "react-bootstrap-icons";
-import QuestionSearch from "../components/QuestionSearch";
+import SearchForm from "../components/SearchForm";
 import TopQuestions from "../components/TopQuestions";
 import QuestionsList from "../components/QuestionList";
 import { useQuery } from "react-query";
@@ -34,7 +34,7 @@ function QuestionBrowserPage() {
             <Button variant="primary" className="w-100">
               <Plus /> Ask a Question
             </Button>
-            <QuestionSearch />
+            <SearchForm title="Search Questions" />
             <TopQuestions questions={topQuestions} />
           </Stack>
         </Col>

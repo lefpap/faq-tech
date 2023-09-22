@@ -1,5 +1,6 @@
 package org.app.faqtech.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.app.faqtech.context.AuthContext;
@@ -38,5 +39,11 @@ public class UserService {
         User emptyUser = UserUpdateRequest.emptyUser(authContext.getLoggedInUser());
         // Save to db
         userRepository.save(emptyUser);
+    }
+
+    public User getUser(Long id) {
+        return userRepository
+            .findById(id)
+            .orElseThrow(()-> new EntityNotFoundException("User with Id: %d not found".formatted(id)));
     }
 }

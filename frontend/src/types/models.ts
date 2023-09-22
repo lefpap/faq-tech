@@ -7,10 +7,18 @@ export interface IUser {
   role: string;
 }
 
+export interface IAnswer {
+  id: number;
+  text: string;
+  createdAt: string;
+  user: IUser;
+}
+
 export interface IQuestion {
   id: number;
   title: string;
   text: string;
   user: IUser;
+  answers: IAnswer[] | number;
   createdAt: string;
 }

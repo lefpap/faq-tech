@@ -1,2 +1,40 @@
-package org.app.faqtech.dto.answer;public record AnswerResponse() {
+package org.app.faqtech.dto.answer;
+
+import org.app.faqtech.dto.user.UserResponse;
+import org.app.faqtech.entity.Answer;
+import org.app.faqtech.entity.User;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+public record AnswerResponse(
+        Long id,
+        String text,
+        LocalDateTime createdAt,
+        UserResponse user
+) {
+
+    public static AnswerResponse fromEntity(Answer answer) {
+        return new AnswerResponse(
+                answer.getId(),
+                answer.getText(),
+                answer.getCreatedAt(),
+                UserResponse.fromUser(answer.getUser())
+        );
+    }
+
+    public static List<AnswerResponse> fromEntities(List<Answer> answers) {
+        return answers.stream()
+                .map(AnswerResponse::fromEntity)
+                .toList();
+    }
+
+    public Answer toEntity() {
+        Answer answer = new Answer();
+        answer.setId(id());
+        answer.setText(text());
+        answer.setCreatedAt(createdAt());
+
+        return answer;
+    }
 }

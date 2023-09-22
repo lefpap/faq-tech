@@ -3,6 +3,7 @@ package org.app.faqtech.controller;
 import lombok.AllArgsConstructor;
 import org.app.faqtech.dto.user.UserResponse;
 import org.app.faqtech.dto.user.UserUpdateRequest;
+import org.app.faqtech.entity.User;
 import org.app.faqtech.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public List<UserResponse> getUsers() {
         return UserResponse.fromUsers(userService.getUsers());
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse getUser(@PathVariable("id") Long id) {
+        return UserResponse.fromUser(userService.getUser(id));
     }
 
     @GetMapping("/me")

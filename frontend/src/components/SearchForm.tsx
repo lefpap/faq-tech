@@ -1,10 +1,14 @@
 import { Button, Card, Form, InputGroup } from "react-bootstrap";
 
-function QuestionSearch() {
+interface SearchFormProps {
+  title: string;
+}
+
+const SearchForm: React.FC<SearchFormProps> = ({ title }) => {
   return (
     <Form>
       <Card>
-        <Card.Header>Search Questions</Card.Header>
+        <Card.Header>{title}</Card.Header>
         <Card.Body>
           <Form.Group className="mb-2" controlId="searchText">
             <Form.Control type="text" placeholder="Text..." />
@@ -29,6 +33,6 @@ function QuestionSearch() {
       </Card>
     </Form>
   );
-}
+};
 
-export default QuestionSearch;
+export default SearchForm;
