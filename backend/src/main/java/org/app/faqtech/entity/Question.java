@@ -2,7 +2,10 @@ package org.app.faqtech.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +19,9 @@ public class Question {
     private String title;
     private String text;
 
-    @Column(name = "created_at", updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdAt;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Instant createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

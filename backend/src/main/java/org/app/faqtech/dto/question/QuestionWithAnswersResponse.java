@@ -3,6 +3,8 @@ package org.app.faqtech.dto.question;
 import org.app.faqtech.dto.answer.AnswerResponse;
 import org.app.faqtech.dto.user.UserResponse;
 import org.app.faqtech.entity.Question;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -10,7 +12,7 @@ public record QuestionWithAnswersResponse(
         Long id,
         String title,
         String text,
-        LocalDateTime createdAt,
+        Instant createdAt,
         List<AnswerResponse> answers,
         UserResponse user
 ) {

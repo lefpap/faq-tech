@@ -1,4 +1,4 @@
-import { Navbar, Nav, Container, Dropdown, Form } from "react-bootstrap";
+import { Navbar, Nav, Container, Dropdown, Form, Button } from "react-bootstrap";
 import { SunFill, MoonFill } from "react-bootstrap-icons";
 import { useTheme } from "../contexts/ThemeContext";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -34,10 +34,12 @@ const AuthButtons = () => {
   return (
     <>
       <Nav.Link as={NavLink} to="/login">
-        Log In
+        <Button size="lg">Log In</Button>
       </Nav.Link>
       <Nav.Link as={NavLink} to="/register">
-        Register
+        <Button size="lg" variant="outline-primary">
+          Register
+        </Button>
       </Nav.Link>
     </>
   );
@@ -46,8 +48,6 @@ const AuthButtons = () => {
 function NavBar() {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated } = useAuth();
-
-  console.log("Authenticated: " + isAuthenticated);
 
   return (
     <Navbar expand="md" bg={theme}>

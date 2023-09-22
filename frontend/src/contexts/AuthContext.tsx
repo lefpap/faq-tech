@@ -16,18 +16,29 @@ interface IAuthContext extends IAuthState {
   logout: () => void;
 }
 
-const token = localStorage.getItem("token");
+const tokenFromLocalStorage = localStorage.getItem("token");
+const decodedToken = tokenFromLocalStorage ? extractToken(tokenFromLocalStorage) : null;
 
 const initialState = {
-  user: null,
-  token: null,
-  isAuthenticated: isTokenValid(token),
+  user: decodedToken
+    ? {
+        id: decodedToken.id,
+        username: decodedToken.sub,
+        role: decodedToken.role,
+      }
+    : null,
+  token: decodedToken
+    ? {
+        iat: decodedToken.iat,
+        exp: decodedToken.exp,
+      }
+    : null,
+  isAuthenticated: !!decodedToken && isTokenValid(tokenFromLocalStorage),
 };
 
 export const AuthContext = createContext<IAuthContext | null>(null);
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  console.log("valid token: " + isTokenValid(token));
   const [state, setState] = useState<IAuthState>(initialState);
 
   const loginMutation = useMutation(loginUser);
@@ -88,7 +99,11 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   };
 
   const logout = () => {
-    setState(initialState);
+    setState({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+    });
     localStorage.removeItem("token");
   };
 

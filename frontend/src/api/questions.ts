@@ -20,3 +20,18 @@ export const fetchQuestionWithId = async ({ queryKey }: QueryFunctionContext): P
     throw error;
   }
 };
+
+type QuestionCreateRequest = {
+  title: string;
+  text: string;
+  userId: number;
+};
+
+export const createQuestion = async (request: QuestionCreateRequest): Promise<number> => {
+  try {
+    const response = await axios.post("/questions", request);
+    return response.status;
+  } catch (error) {
+    throw error;
+  }
+};

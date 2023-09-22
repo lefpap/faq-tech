@@ -2,15 +2,14 @@ package org.app.faqtech.dto.answer;
 
 import org.app.faqtech.dto.user.UserResponse;
 import org.app.faqtech.entity.Answer;
-import org.app.faqtech.entity.User;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 public record AnswerResponse(
         Long id,
         String text,
-        LocalDateTime createdAt,
+        Instant createdAt,
         UserResponse user
 ) {
 
