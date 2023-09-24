@@ -1,17 +1,17 @@
-import { Card, Table } from "react-bootstrap";
+import { Button, Card, CardProps, Table } from "react-bootstrap";
 import { IUser } from "../types/models";
 
-interface ProfileProps {
+interface ProfileProps extends CardProps {
   user: IUser | null;
 }
 
-const Profile: React.FC<ProfileProps> = ({ user }) => {
+const Profile: React.FC<ProfileProps> = ({ user, className }) => {
   if (!user) {
     return <div>Error loading user details</div>;
   }
 
   return (
-    <Card>
+    <Card className={className}>
       <Card.Header>Profile Details</Card.Header>
       <Card.Body>
         <Table bordered hover>
@@ -39,6 +39,14 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
           </tbody>
         </Table>
       </Card.Body>
+      <Card.Footer className="d-flex gap-3 justify-content-center">
+        <Button size="sm" variant="secondary" className="w-100">
+          Update Info
+        </Button>
+        <Button size="sm" variant="outline-secondary" className="w-100">
+          Change Credentials
+        </Button>
+      </Card.Footer>
     </Card>
   );
 };

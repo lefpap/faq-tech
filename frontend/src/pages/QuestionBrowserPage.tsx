@@ -1,6 +1,5 @@
-import { Button, Col, Container, Row, Stack } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { Plus } from "react-bootstrap-icons";
-import SearchForm from "../components/SearchForm";
 import TopQuestions from "../components/TopQuestions";
 import QuestionsList from "../components/QuestionList";
 import { useQuery } from "react-query";
@@ -9,6 +8,7 @@ import QuestionModal from "../components/QuestionModal";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import SearchForm from "../components/SearchForm";
 
 function QuestionBrowserPage() {
   const { isAuthenticated } = useAuth();
@@ -35,8 +35,7 @@ function QuestionBrowserPage() {
   }
 
   // For top questions, shuffle and take the first 3
-  const shuffled = questions?.sort(() => 0.5 - Math.random());
-  const topQuestions = shuffled?.slice(0, 3);
+  const topQuestions = questions?.slice(0, 3);
 
   return (
     <>
@@ -45,19 +44,21 @@ function QuestionBrowserPage() {
       <Container as={`section`} className="my-5">
         <Row className="justify-content-center">
           {/* Questions Column */}
-          <Col xs={12} md={8} lg={7} className="mb-4 mb-lg-0 order-1 order-lg-0 mw-">
-            <QuestionsList questions={questions} />
-          </Col>
-
-          {/* Search and Popular Questions Column */}
-          <Col xs={12} md={8} lg={5} className="order-0 order-lg-1">
-            <Stack gap={3} className="sticky-form pb-4">
-              <Button variant="primary" className="w-100" onClick={handleAskQuestion}>
+          <Col xs={12} md={8} lg={7} className="d-flex flex-column justify-content-center h-100">
+            <div className="sticky-top bg-body " style={{ paddingTop: "5rem" }}>
+              <Button variant="primary" className="w-100 mb-3" onClick={handleAskQuestion}>
                 <Plus /> Ask a Question
               </Button>
-              <SearchForm title="Search Questions" />
+              <SearchForm title="Search Questions" className="mb-3" />
+            </div>
+            <QuestionsList questions={questions} gap={3} className="flex-grow-1 overflow-auto" highlightOwned />
+          </Col>
+
+          {/* Top Questions Column */}
+          <Col md={4} className="d-none d-lg-block">
+            <div className="sticky-top" style={{ paddingTop: "5rem" }}>
               <TopQuestions questions={topQuestions} />
-            </Stack>
+            </div>
           </Col>
         </Row>
       </Container>

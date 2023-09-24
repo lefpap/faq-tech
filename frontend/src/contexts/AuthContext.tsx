@@ -17,8 +17,8 @@ interface IAuthContext extends IAuthState {
   logout: () => void;
 }
 
-const tokenFromLocalStorage = localStorage.getItem("token");
-const decodedToken = tokenFromLocalStorage ? extractToken(tokenFromLocalStorage) : null;
+const token = localStorage.getItem("token");
+const decodedToken = token && isTokenValid(token) ? extractToken(token) : null;
 const initialState = {
   user: decodedToken
     ? {
@@ -37,7 +37,7 @@ const initialState = {
         exp: decodedToken.exp,
       }
     : null,
-  isAuthenticated: !!decodedToken && isTokenValid(tokenFromLocalStorage),
+  isAuthenticated: !!decodedToken && isTokenValid(token),
 };
 
 export const AuthContext = createContext<IAuthContext | null>(null);

@@ -24,7 +24,7 @@ const QuestionModal: React.FC<QuestionModalProps> = ({ show, onHide }) => {
       setTitle("");
       setText("");
 
-      // invalidate the questions
+      // invalidate the queries
       queryClient.invalidateQueries("questions");
 
       // display a success alert to the user

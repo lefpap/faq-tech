@@ -30,20 +30,23 @@ const QuestionDetailsPage = () => {
     <Container as={`section`} className="my-5">
       <Row className="justify-content-center">
         {/* Questions Column */}
-        <Col xs={12} md={8} lg={7} className="mb-4 mb-lg-0 order-1 order-lg-0 mw-">
-          <Question question={question} className="shadow h-100" />
-          <Stack className="scrollable-questions my-3">
-            {Array.isArray(question.answers) && question.answers.map((answer) => <Answer answer={answer} />)}
-          </Stack>
+        <Col md={12} lg={7} className="d-flex flex-column justify-content-center h-100">
+          <div className="sticky-top" style={{ paddingTop: "5rem" }}>
+            <Question question={question} className="h-100" />
+          </div>
         </Col>
 
-        {/* Search and Popular Questions Column */}
-        <Col xs={12} md={8} lg={5} className="order-0 order-lg-1">
-          <Stack gap={3} className="sticky-form pb-4">
-            <Button variant="primary" className="w-100">
-              <Plus /> Answer Question
+        {/* Top Questions Column */}
+        <Col lg={5}>
+          <div className="sticky-top bg-body " style={{ paddingTop: "5rem" }}>
+            <Button variant="primary" className="w-100 mb-3">
+              <Plus /> Answer the Question
             </Button>
-            <SearchForm title="Search Answers" />
+            <SearchForm title="Search Answers" className="mb-3" />
+          </div>
+          <Stack className="scrollable-questions my-3">
+            {Array.isArray(question.answers) &&
+              question.answers.map((answer) => <Answer key={answer.id} answer={answer} />)}
           </Stack>
         </Col>
       </Row>

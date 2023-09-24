@@ -1,27 +1,28 @@
-import { Stack } from "react-bootstrap";
+import { Stack, StackProps } from "react-bootstrap";
 import Question from "./Question";
 import { IQuestion } from "../types/models";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
-export interface QuestionListProps {
+export interface QuestionListProps extends StackProps {
   questions: IQuestion[] | undefined;
+  highlightOwned?: boolean | false;
 }
 
-function QuestionsList({ questions }: QuestionListProps) {
+function QuestionsList({ questions, highlightOwned, className, gap }: QuestionListProps) {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const handleQuestionClick = (id: number) => navigate(`/questions/details/${id}`);
 
   return (
-    <Stack gap={4} className="scrollable-questions">
+    <Stack gap={gap} className={className}>
       {questions?.map((question) => (
         <Question
-          className="question-item shadow"
-          border={`${user?.id === question.user.id && "primary"}`}
-          bodyClass="question-text"
           key={question.id}
+          className="question-item shadow"
+          bodyClass="question-text"
+          border={`${highlightOwned && user?.id === question.user.id && "primary"}`}
           question={question}
           onClick={() => handleQuestionClick(question.id)}
         />

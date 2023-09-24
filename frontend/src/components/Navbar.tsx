@@ -50,7 +50,7 @@ function NavBar() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <Navbar expand="md" bg={theme}>
+    <Navbar fixed="top" expand="md" bg={theme}>
       <Container fluid="sm">
         <Navbar.Brand className="fw-bold fs-3" href="#home">
           FAQTech.
