@@ -5,7 +5,6 @@ import org.app.faqtech.dto.user.UserResponse;
 import org.app.faqtech.entity.Question;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record QuestionWithAnswersResponse(

@@ -3,9 +3,10 @@ import { TCredentials } from "../types/auth";
 import { useMutation } from "react-query";
 import { loginUser, registerUser } from "../api/auth";
 import { extractToken, isTokenValid } from "../utils/auth";
+import { IUser } from "../types/models";
 
 interface IAuthState {
-  user: { id: number; username: string; role: string } | null;
+  user: IUser | null;
   token: { iat: number; exp: number } | null;
   isAuthenticated: boolean;
 }
@@ -18,12 +19,15 @@ interface IAuthContext extends IAuthState {
 
 const tokenFromLocalStorage = localStorage.getItem("token");
 const decodedToken = tokenFromLocalStorage ? extractToken(tokenFromLocalStorage) : null;
-
 const initialState = {
   user: decodedToken
     ? {
         id: decodedToken.id,
         username: decodedToken.sub,
+        email: decodedToken.email,
+        firstname: decodedToken.firstname,
+        lastname: decodedToken.lastname,
+        simplePushKey: decodedToken.simplePushKey,
         role: decodedToken.role,
       }
     : null,
@@ -57,6 +61,10 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         user: {
           id: decoded.id,
           username: decoded.sub,
+          email: decoded.email,
+          firstname: decoded.firstname,
+          lastname: decoded.lastname,
+          simplePushKey: decoded.simplePushKey,
           role: decoded.role,
         },
         token: {
@@ -83,6 +91,10 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         user: {
           id: decoded.id,
           username: decoded.sub,
+          email: decoded.email,
+          firstname: decoded.firstname,
+          lastname: decoded.lastname,
+          simplePushKey: decoded.simplePushKey,
           role: decoded.role,
         },
         token: {

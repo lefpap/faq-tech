@@ -15,6 +15,10 @@ export interface IJwtToken {
   sub: string;
   iat: number;
   exp: number;
-  role: string;
   id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  simplePushKey?: string;
+  role: string;
 }

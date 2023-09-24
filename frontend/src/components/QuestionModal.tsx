@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Button, FloatingLabel, Modal, ModalProps } from "react-bootstrap";
+import { Button, FloatingLabel, Modal, ModalProps, Toast } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { useMutation, useQueryClient } from "react-query";
@@ -29,9 +29,6 @@ const QuestionModal: React.FC<QuestionModalProps> = ({ show, onHide }) => {
 
       // display a success alert to the user
       setAlert(true);
-      setTimeout(() => {
-        setAlert(false);
-      }, 3000);
 
       // hide modal
       onHide?.();
@@ -85,14 +82,20 @@ const QuestionModal: React.FC<QuestionModalProps> = ({ show, onHide }) => {
   return (
     <>
       {alert && (
-        <Alert
-          variant="success"
+        // <Toast className="z-3 position-absolute top-25 start-50 translate-middle" onClose={() => setAlert(false)}>
+        //   <Toast.Body>Question was successfully created!</Toast.Body>
+        // </Toast>
+        <Toast
+          show={alert}
           className="z-3 position-absolute top-25 start-50 translate-middle"
+          delay={2000}
+          bg="success"
+          autohide
           onClose={() => setAlert(false)}
-          dismissible
         >
-          Question was successfully created!
-        </Alert>
+          <Toast.Header className="d-flex justify-content-between">Success</Toast.Header>
+          <Toast.Body>Question was successfully created!</Toast.Body>
+        </Toast>
       )}
       <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
         {error && <div className="alert alert-danger">{error}</div>}

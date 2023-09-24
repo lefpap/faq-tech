@@ -49,6 +49,10 @@ public class AuthService {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("id", user.getId());
         extraClaims.put("role", user.getRole());
+        extraClaims.put("firstname", user.getFirstname());
+        extraClaims.put("lastname", user.getLastname());
+        extraClaims.put("email", user.getEmail());
+        extraClaims.put("simplePushKey", user.getSimplePushKey());
         String token = jwtService.generateToken(user.getUserDetails(), extraClaims);
         return new AuthResponse(token);
     }
@@ -93,6 +97,10 @@ public class AuthService {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("id", currentUser.getId());
         extraClaims.put("role", currentUser.getRole());
+        extraClaims.put("firstname", currentUser.getFirstname());
+        extraClaims.put("lastname", currentUser.getLastname());
+        extraClaims.put("email", currentUser.getEmail());
+        extraClaims.put("simplePushKey", currentUser.getSimplePushKey());
         String token = jwtService.generateToken(currentUser.getUserDetails(), extraClaims);
         return new AuthResponse(token);
     }
@@ -109,9 +117,13 @@ public class AuthService {
                 .findByUsername(request.username())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        Map<String, Object> extraClaims = new HashMap<>();
+         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("id", foundUser.getId());
         extraClaims.put("role", foundUser.getRole());
+        extraClaims.put("firstname", foundUser.getFirstname());
+        extraClaims.put("lastname", foundUser.getLastname());
+        extraClaims.put("email", foundUser.getEmail());
+        extraClaims.put("simplePushKey", foundUser.getSimplePushKey());
         String token = jwtService.generateToken(foundUser.getUserDetails(), extraClaims);
         return new AuthResponse(token);
     }

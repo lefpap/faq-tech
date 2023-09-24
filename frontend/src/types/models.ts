@@ -5,6 +5,7 @@ export interface IUser {
   firstname: string;
   lastname: string;
   role: string;
+  simplePushKey?: string;
 }
 
 export interface IAnswer {

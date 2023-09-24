@@ -4,7 +4,6 @@ import org.app.faqtech.dto.user.UserResponse;
 import org.app.faqtech.entity.Question;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record QuestionResponse(
@@ -12,7 +11,7 @@ public record QuestionResponse(
         String title,
         String text,
         Instant createdAt,
-        Integer answersCount,
+        Integer answers,
         UserResponse user
 ) {
 

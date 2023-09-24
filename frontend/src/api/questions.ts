@@ -21,6 +21,16 @@ export const fetchQuestionWithId = async ({ queryKey }: QueryFunctionContext): P
   }
 };
 
+export const fetchUserQuestions = async ({ queryKey }: QueryFunctionContext): Promise<IQuestion[]> => {
+  const [, userId] = queryKey;
+  try {
+    const response = await axios.get<IQuestion[]>(`/questions/user/${userId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 type QuestionCreateRequest = {
   title: string;
   text: string;
