@@ -5,6 +5,7 @@ import org.app.faqtech.dto.answer.AnswerCreateRequest;
 import org.app.faqtech.dto.answer.AnswerResponse;
 import org.app.faqtech.service.AnswerService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/answers")
 @RequiredArgsConstructor
-@CrossOrigin
 public class AnswerController {
 
     private final AnswerService answerService;
@@ -31,6 +31,7 @@ public class AnswerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
     public Long createAnswer(@RequestBody AnswerCreateRequest request) {
         return answerService.createAnswer(request).getId();
     }
@@ -38,6 +39,7 @@ public class AnswerController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public void deleteAnswer(@PathVariable("id") Long id) {
         answerService.deleteAnswer(id);
     }

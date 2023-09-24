@@ -1,11 +1,11 @@
 package org.app.faqtech.security.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.app.faqtech.context.AuthContext;
 import org.app.faqtech.dto.auth.AuthResponse;
 import org.app.faqtech.dto.auth.ChangeCredentialsRequest;
 import org.app.faqtech.dto.auth.LoginRequest;
@@ -17,8 +17,6 @@ import org.app.faqtech.exception.UnauthorizedActionException;
 import org.app.faqtech.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +28,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+     private final AuthContext authContext;
     private final AuthenticationManager authManager;
 
     public AuthResponse register(RegisterRequest request) {
@@ -40,7 +39,7 @@ public class AuthService {
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
                 .simplePushKey(request.simplePushKey())
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .active(true)
                 .build();
 
@@ -58,11 +57,7 @@ public class AuthService {
     }
 
     public AuthResponse changeCredentials(ChangeCredentialsRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-
-        User currentUser = userRepository.findByUsername(currentUsername)
-                .orElseThrow(() -> new EntityNotFoundException("Authenticated user not found"));
+        User currentUser = authContext.getLoggedInUser();
 
         // Verify the current password
         if (!passwordEncoder.matches(request.currentPassword(), currentUser.getPassword())) {

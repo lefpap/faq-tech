@@ -5,6 +5,7 @@ import org.app.faqtech.dto.question.QuestionResponse;
 import org.app.faqtech.dto.question.QuestionWithAnswersResponse;
 import org.app.faqtech.service.QuestionService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/questions")
 @RequiredArgsConstructor
-@CrossOrigin
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -37,12 +37,14 @@ public class QuestionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize(value = "hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public void createQuestion(@RequestBody QuestionCreateRequest request) {
         questionService.createQuestion(request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public void deleteQuestion(@PathVariable("id") Long id) {
         questionService.deleteQuestion(id);
     }

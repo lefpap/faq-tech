@@ -3,29 +3,32 @@ import { Button, FloatingLabel, Modal, ModalProps, Toast } from "react-bootstrap
 import { Form } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { useMutation, useQueryClient } from "react-query";
-import { createQuestion } from "../api/questions";
+import { updateUserInfo } from "../api/users";
 
-interface QuestionModalProps extends ModalProps {}
+interface UserInfoModalProps extends ModalProps {}
 
-const QuestionModal: React.FC<QuestionModalProps> = ({ show, onHide }) => {
+const UserInfoModal: React.FC<UserInfoModalProps> = ({ show, onHide }) => {
+  //   const queryClient = useQueryClient();
   const { user } = useAuth();
-  const queryClient = useQueryClient();
   const [alert, setAlert] = useState(false);
 
   // Form elements
-  const [title, setTitle] = useState<string>("");
-  const [text, setText] = useState<string>("");
+  const [firstname, setFirstname] = useState<string>("");
+  const [lastname, setLastname] = useState<string>("");
+  const [simplePushKey, setSimplePushkey] = useState<string>("");
   const [validated, setValidated] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
 
-  const createQuestionMutation = useMutation(createQuestion, {
+  const queryClient = useQueryClient();
+  const updateUserInfoMutation = useMutation(updateUserInfo, {
     onSuccess: () => {
       // set form elments to default values
-      setTitle("");
-      setText("");
+      setFirstname("");
+      setLastname("");
+      setSimplePushkey("");
 
       // invalidate the queries
-      queryClient.invalidateQueries("questions");
+      queryClient.invalidateQueries(["users", "me"]);
 
       // display a success alert to the user
       setAlert(true);
@@ -44,11 +47,14 @@ const QuestionModal: React.FC<QuestionModalProps> = ({ show, onHide }) => {
     const value = event.target.value;
 
     switch (name) {
-      case "title":
-        setTitle(value);
+      case "firstname":
+        setFirstname(value);
         break;
-      case "text":
-        setText(value);
+      case "lastname":
+        setLastname(value);
+        break;
+      case "simplePushKey":
+        setSimplePushkey(value);
         break;
       default:
         throw new Error("Invalid input name");
@@ -71,11 +77,15 @@ const QuestionModal: React.FC<QuestionModalProps> = ({ show, onHide }) => {
       return;
     }
 
-    // Call the service using react-query mutation
-    createQuestionMutation.mutate({
-      title,
-      text,
-      userId: user.id,
+    if (firstname.trim() === "" && lastname.trim() === "" && simplePushKey.trim() === "") {
+      onHide?.();
+      return;
+    }
+
+    updateUserInfoMutation.mutate({
+      firstname,
+      lastname,
+      simplePushKey,
     });
   };
 
@@ -91,41 +101,45 @@ const QuestionModal: React.FC<QuestionModalProps> = ({ show, onHide }) => {
           onClose={() => setAlert(false)}
         >
           <Toast.Header className="d-flex justify-content-between">Success</Toast.Header>
-          <Toast.Body>Question was successfully created!</Toast.Body>
+          <Toast.Body>User Info been changed successfully</Toast.Body>
         </Toast>
       )}
       <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
         {error && <div className="alert alert-danger">{error}</div>}
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Modal.Header closeButton>
-            <Modal.Title>Ask Question</Modal.Title>
+            <Modal.Title>Update User Info</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3">
-              <FloatingLabel controlId="title" label="Title">
+              <FloatingLabel controlId="firstname" label="Firstname">
                 <Form.Control
                   type="text"
-                  placeholder="Write title here"
-                  value={title}
+                  placeholder="Write first here"
+                  value={firstname}
                   onChange={handleInputChange}
-                  name="title"
-                  required
+                  name="firstname"
                 />
-                <Form.Control.Feedback type="invalid">Title is empty</Form.Control.Feedback>
               </FloatingLabel>
             </Form.Group>
             <Form.Group className="mb-3">
-              <FloatingLabel controlId="text" label="Text">
+              <FloatingLabel controlId="lasname" label="Lastname">
                 <Form.Control
-                  as="textarea"
-                  placeholder="Write some text here"
-                  style={{ height: "15rem" }}
-                  value={text}
+                  placeholder="Write lastname here"
+                  value={lastname}
                   onChange={handleInputChange}
-                  name="text"
-                  required
+                  name="lastname"
                 />
-                <Form.Control.Feedback type="invalid">Text is empty</Form.Control.Feedback>
+              </FloatingLabel>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <FloatingLabel controlId="simplePushKey" label="SimplePush Key">
+                <Form.Control
+                  placeholder="Write simple push key here"
+                  value={simplePushKey}
+                  onChange={handleInputChange}
+                  name="simplePushKey"
+                />
               </FloatingLabel>
             </Form.Group>
           </Modal.Body>
@@ -140,4 +154,4 @@ const QuestionModal: React.FC<QuestionModalProps> = ({ show, onHide }) => {
   );
 };
 
-export default QuestionModal;
+export default UserInfoModal;

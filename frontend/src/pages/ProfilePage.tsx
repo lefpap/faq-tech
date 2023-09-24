@@ -8,6 +8,8 @@ import { Plus } from "react-bootstrap-icons";
 import SearchForm from "../components/SearchForm";
 import { useState } from "react";
 import QuestionModal from "../components/QuestionModal";
+import CredentialsModal from "../components/CredentialsModal";
+import UserInfoModal from "../components/UserInfoModal";
 
 const ProfilePage = () => {
   const { user, isAuthenticated } = useAuth();
@@ -17,24 +19,29 @@ const ProfilePage = () => {
 
   const { data: questions } = useQuery(["questions", user.id], fetchUserQuestions);
 
-  const [showModal, setShowModal] = useState(false);
+  const [showQuestionModal, setShowQuestionModal] = useState(false);
+  const [showCredentialsModal, setShowCredentialsModal] = useState(false);
+  const [showUserInfoModal, setShowUserInfoModal] = useState(false);
 
   const handleAskQuestion = () => {
     console.log(isAuthenticated);
     if (!isAuthenticated) {
-      setShowModal(false);
+      setShowQuestionModal(false);
     }
 
-    setShowModal(true);
+    setShowQuestionModal(true);
   };
 
   return (
     <>
-      <QuestionModal show={showModal} onHide={() => setShowModal(false)} size="xl" />
+      <QuestionModal show={showQuestionModal} onHide={() => setShowQuestionModal(false)} size="xl" />
+      <CredentialsModal show={showCredentialsModal} onHide={() => setShowCredentialsModal(false)} />
+      <UserInfoModal show={showUserInfoModal} onHide={() => setShowUserInfoModal(false)} />
+
       <Container as={`section`} className="my-5">
         <Row className="justify-content-center">
           {/* Questions Column */}
-          <Col md={12} lg={7} className="d-flex flex-column justify-content-center h-100">
+          <Col md={12} lg={7} className="d-flex flex-column justify-content-center h-100 order-2 order-lg-1">
             <div className="sticky-top bg-body " style={{ paddingTop: "5rem" }}>
               <Button variant="primary" className="w-100 mb-3" onClick={handleAskQuestion}>
                 <Plus /> Ask a Question
@@ -44,10 +51,13 @@ const ProfilePage = () => {
             <QuestionsList gap={3} questions={questions} />
           </Col>
 
-          {/* Top Questions Column */}
-          <Col lg={5}>
+          {/* Profile Column */}
+          <Col lg={5} className="order-1 order-lg-2">
             <div className="sticky-top" style={{ paddingTop: "5rem" }}>
-              <Profile user={user} />
+              <Profile
+                onChangeCredentials={() => setShowCredentialsModal(true)}
+                onUpdateInfo={() => setShowUserInfoModal(true)}
+              />
             </div>
           </Col>
         </Row>

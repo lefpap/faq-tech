@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useState } from "react";
-import { TCredentials } from "../types/auth";
+import { ICredentialsChange, TCredentials } from "../types/auth";
 import { useMutation } from "react-query";
-import { loginUser, registerUser } from "../api/auth";
+import { changeCredentials, loginUser, registerUser } from "../api/auth";
 import { extractToken, isTokenValid } from "../utils/auth";
 import { IUser } from "../types/models";
 
@@ -14,6 +14,7 @@ interface IAuthState {
 interface IAuthContext extends IAuthState {
   login: (credentials: TCredentials) => Promise<any>;
   register: (registerData: any) => Promise<any>;
+  credentialsChange: (credentials: any) => Promise<any>;
   logout: () => void;
 }
 
@@ -47,6 +48,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const loginMutation = useMutation(loginUser);
   const registerMutation = useMutation(registerUser);
+  const changeCrdentialsMutation = useMutation(changeCredentials);
 
   const login = async (credentials: TCredentials) => {
     try {
@@ -110,6 +112,38 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
+  const credentialsChange = async (credentials: ICredentialsChange) => {
+    try {
+      const data = await changeCrdentialsMutation.mutateAsync(credentials);
+      const decoded = extractToken(data.token);
+
+      if (!decoded) {
+        throw new Error("Invalid token");
+      }
+
+      setState({
+        user: {
+          id: decoded.id,
+          username: decoded.sub,
+          email: decoded.email,
+          firstname: decoded.firstname,
+          lastname: decoded.lastname,
+          simplePushKey: decoded.simplePushKey,
+          role: decoded.role,
+        },
+        token: {
+          iat: decoded.iat,
+          exp: decoded.exp,
+        },
+        isAuthenticated: true,
+      });
+      localStorage.setItem("token", data.token);
+    } catch (error) {
+      console.error("Credentials change failed:", error);
+      throw error;
+    }
+  };
+
   const logout = () => {
     setState({
       user: null,
@@ -119,5 +153,9 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     localStorage.removeItem("token");
   };
 
-  return <AuthContext.Provider value={{ ...state, login, logout, register }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ ...state, login, logout, register, credentialsChange }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

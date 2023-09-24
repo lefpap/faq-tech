@@ -3,6 +3,13 @@ export type TCredentials = {
   password: string;
 };
 
+export interface ICredentialsChange {
+  currentPassword: string;
+  newPassword?: string;
+  newUsername?: string;
+  newEmail?: string;
+}
+
 export type TRegister = {
   credentials: TCredentials;
   email: string;
