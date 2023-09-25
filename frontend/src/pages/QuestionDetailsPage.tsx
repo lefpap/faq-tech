@@ -47,7 +47,12 @@ const QuestionDetailsPage = () => {
             <Stack className="scrollable-questions my-3" gap={3}>
               {Array.isArray(question.answers) &&
                 question.answers.map((answer) => (
-                  <Answer key={answer.id} answer={answer} border={`${answer.user.id === user?.id && "primary"}`} />
+                  <Answer
+                    key={answer.id}
+                    id={`answer-${answer.id}`}
+                    answer={answer}
+                    border={`${answer.user.id === user?.id && "primary"}`}
+                  />
                 ))}
             </Stack>
           </Col>

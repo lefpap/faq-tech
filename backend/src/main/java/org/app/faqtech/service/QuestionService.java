@@ -7,8 +7,7 @@ import org.app.faqtech.dto.question.QuestionCreateRequest;
 import org.app.faqtech.entity.Question;
 import org.app.faqtech.entity.User;
 import org.app.faqtech.repository.QuestionRepository;
-import org.app.faqtech.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +18,10 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final UserService userService;
+    private final NotificationService notificationService;
+
+    @Value("${app.base-url}")
+    private String baseUrl;
 
 
     public List<Question> getQuestions() {
@@ -40,6 +43,9 @@ public class QuestionService {
         User user = userService.getUser(request.userId());
         Question question = request.toEntity(user);
         questionRepository.save(question);
+
+        String questionUrl = "Find question at: " + baseUrl + "/questions/details/%d".formatted(question.getId());
+        notificationService.sendNotification(user.getSimplePushKey(), question.getTitle(), questionUrl);
     }
 
     @Transactional

@@ -8,6 +8,7 @@ import org.app.faqtech.entity.Answer;
 import org.app.faqtech.entity.Question;
 import org.app.faqtech.entity.User;
 import org.app.faqtech.repository.AnswerRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
     private final UserService userService;
+    private final NotificationService notificationService;
+
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     public List<Answer> getAnswers() {
         return answerRepository.findAll();
@@ -36,7 +41,12 @@ public class AnswerService {
         Question question = questionService.getQuestion(request.questionId());
         Answer answer = request.toEntity(user, question);
 
-        return answerRepository.save(answer);
+
+        Answer createdAnswer = answerRepository.save(answer);
+        
+        String answerUrl = baseUrl + "/questions/details/%d#answer-%d".formatted(question.getId(), createdAnswer.getId());
+        notificationService.sendNotification(user.getSimplePushKey(), "REPLY:%s".formatted(question.getTitle()), "You can find the answer here: %s".formatted(answerUrl));
+        return createdAnswer;
     }
 
     @Transactional

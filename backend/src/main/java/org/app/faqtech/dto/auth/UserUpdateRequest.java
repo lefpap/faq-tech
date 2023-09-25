@@ -1,6 +1,6 @@
 package org.app.faqtech.dto.auth;
 
-public record ChangeCredentialsRequest(
+public record UserUpdateRequest(
         String currentPassword,  // The current password for verification
         String newPassword,      // Optional: Only set if the password is being changed
         String newUsername,      // Optional: Only set if the username is being changed

@@ -6,7 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 interface UserInfoModalProps extends ModalProps {}
 
 const UserInfoModal: React.FC<UserInfoModalProps> = ({ show, onHide }) => {
-  //   const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const { user, updateUserInfo } = useAuth();
   const [alert, setAlert] = useState(false);
 
@@ -88,6 +88,18 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ show, onHide }) => {
         newLastname,
         newSimplePushKey,
       });
+
+      setCurrentPassword("");
+      setNewPassword("");
+      setNewUsername("");
+      setNewEmail("");
+      setNewFirstname("");
+      setNewLastname("");
+      setNewSimplePushkey("");
+
+      onHide?.();
+
+      setAlert(true);
     } catch (error) {
       setError("Error updating user info");
     }

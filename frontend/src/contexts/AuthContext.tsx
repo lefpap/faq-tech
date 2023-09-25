@@ -1,4 +1,4 @@
-import { PropsWithChildren, createContext, useState } from "react";
+import { PropsWithChildren, createContext, useState, useEffect } from "react";
 import { IUpdateUserInfo, TCredentials } from "../types/auth";
 import { useMutation } from "react-query";
 import { updateUser, loginUser, registerUser } from "../api/auth";
@@ -18,28 +18,38 @@ interface IAuthContext extends IAuthState {
   logout: () => void;
 }
 
-const token = localStorage.getItem("token");
-const decodedToken = token && isTokenValid(token) ? extractToken(token) : null;
-const initialState = {
-  user: decodedToken
-    ? {
-        id: decodedToken.id,
-        username: decodedToken.sub,
-        email: decodedToken.email,
-        firstname: decodedToken.firstname,
-        lastname: decodedToken.lastname,
-        simplePushKey: decodedToken.simplePushKey,
-        role: decodedToken.role,
-      }
-    : null,
-  token: decodedToken
-    ? {
-        iat: decodedToken.iat,
-        exp: decodedToken.exp,
-      }
-    : null,
-  isAuthenticated: !!decodedToken && isTokenValid(token),
+const getInitialState = () => {
+  const token = localStorage.getItem("token");
+  const decodedToken = token && isTokenValid(token) ? extractToken(token) : null;
+
+  if (!decodedToken) {
+    localStorage.removeItem("token");
+    return {
+      user: null,
+      token: null,
+      isAuthenticated: false,
+    };
+  }
+
+  return {
+    user: {
+      id: decodedToken.id,
+      username: decodedToken.sub,
+      email: decodedToken.email,
+      firstname: decodedToken.firstname,
+      lastname: decodedToken.lastname,
+      simplePushKey: decodedToken.simplePushKey,
+      role: decodedToken.role,
+    },
+    token: {
+      iat: decodedToken.iat,
+      exp: decodedToken.exp,
+    },
+    isAuthenticated: true,
+  };
 };
+
+const initialState = getInitialState();
 
 export const AuthContext = createContext<IAuthContext | null>(null);
 
@@ -152,6 +162,12 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     });
     localStorage.removeItem("token");
   };
+
+  useEffect(() => {
+    if (state.token && !isTokenValid(localStorage.getItem("token"))) {
+      logout();
+    }
+  }, [state.token]);
 
   return (
     <AuthContext.Provider value={{ ...state, login, logout, register, updateUserInfo }}>

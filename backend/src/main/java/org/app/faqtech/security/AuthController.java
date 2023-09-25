@@ -2,7 +2,7 @@ package org.app.faqtech.security;
 
 import lombok.RequiredArgsConstructor;
 import org.app.faqtech.dto.auth.AuthResponse;
-import org.app.faqtech.dto.auth.ChangeCredentialsRequest;
+import org.app.faqtech.dto.auth.UserUpdateRequest;
 import org.app.faqtech.dto.auth.LoginRequest;
 import org.app.faqtech.dto.auth.RegisterRequest;
 import org.app.faqtech.security.service.AuthService;
@@ -37,7 +37,7 @@ public class AuthController {
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public AuthResponse changeCredentials(@RequestBody ChangeCredentialsRequest request) {
-        return authService.changeCredentials(request);
+    public AuthResponse updateUserInfo(@RequestBody UserUpdateRequest request) {
+        return authService.updateUserInfo(request);
     }
 }

@@ -1,8 +1,6 @@
 import { Button, Card, CardProps, Table } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-import { useQuery } from "react-query";
-import { getUser } from "../api/users";
+import { Navigate } from "react-router-dom";
 
 interface ProfileProps extends CardProps {
   onUpdateInfo: () => void;
@@ -10,26 +8,10 @@ interface ProfileProps extends CardProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({ className, onDelete, onUpdateInfo }) => {
-  const navigate = useNavigate();
   const { user } = useAuth();
   if (!user) {
-    navigate("/login");
-    return;
+    return <Navigate to="/" />;
   }
-
-  const { data: loggedInUser, isLoading, isError, error } = useQuery(["users", "me"], getUser);
-
-  if (isError) {
-    navigate("/login");
-    console.log(error);
-    return;
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  console.log(loggedInUser);
 
   return (
     <Card className={className}>
@@ -39,23 +21,23 @@ const Profile: React.FC<ProfileProps> = ({ className, onDelete, onUpdateInfo }) 
           <tbody>
             <tr>
               <td>User</td>
-              <td>{loggedInUser?.username}</td>
+              <td>{user?.username}</td>
             </tr>
             <tr>
               <td>Email</td>
-              <td>{loggedInUser?.email}</td>
+              <td>{user?.email}</td>
             </tr>
             <tr>
               <td>Firstname</td>
-              <td>{loggedInUser?.firstname}</td>
+              <td>{user?.firstname}</td>
             </tr>
             <tr>
               <td>Lastname</td>
-              <td>{loggedInUser?.lastname}</td>
+              <td>{user?.lastname}</td>
             </tr>
             <tr>
               <td>SimplePush Key</td>
-              <td>{loggedInUser && loggedInUser.simplePushKey ? loggedInUser.simplePushKey : "NA"}</td>
+              <td>{user && user.simplePushKey ? user.simplePushKey : "NA"}</td>
             </tr>
           </tbody>
         </Table>

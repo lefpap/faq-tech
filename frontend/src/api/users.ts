@@ -10,16 +10,9 @@ export const getUser = async (): Promise<IUser> => {
   }
 };
 
-interface IUserInfo {
-  firstname: string;
-  lastname: string;
-  simplePushKey?: string;
-}
-
-export const updateUserInfo = async (request: IUserInfo): Promise<number> => {
+export const deleteUser = async (): Promise<void> => {
   try {
-    const response = await axios.put("/users/me", request);
-    return response.status;
+    await axios.delete<void>("/users/me");
   } catch (error) {
     throw error;
   }

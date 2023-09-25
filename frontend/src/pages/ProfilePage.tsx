@@ -9,6 +9,7 @@ import SearchForm from "../components/SearchForm";
 import { useState } from "react";
 import QuestionModal from "../components/QuestionModal";
 import UserInfoModal from "../components/UserInfoModal";
+import UserDeleteModal from "../components/UserDeleteModal";
 
 const ProfilePage = () => {
   const { user, isAuthenticated } = useAuth();
@@ -20,6 +21,7 @@ const ProfilePage = () => {
 
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   const [showUserInfoModal, setShowUserInfoModal] = useState(false);
+  const [showUserDeleteModal, setShowUserDeleteModal] = useState(false);
 
   const handleAskQuestion = () => {
     console.log(isAuthenticated);
@@ -34,6 +36,7 @@ const ProfilePage = () => {
     <>
       <QuestionModal show={showQuestionModal} onHide={() => setShowQuestionModal(false)} size="xl" />
       <UserInfoModal show={showUserInfoModal} onHide={() => setShowUserInfoModal(false)} />
+      <UserDeleteModal show={showUserDeleteModal} onHide={() => setShowUserDeleteModal(false)} />
 
       <Container as={`section`} className="my-5">
         <Row className="justify-content-center">
@@ -51,7 +54,12 @@ const ProfilePage = () => {
           {/* Profile Column */}
           <Col lg={5} className="order-1 order-lg-2">
             <div className="sticky-top" style={{ paddingTop: "5rem" }}>
-              <Profile onUpdateInfo={() => setShowUserInfoModal(true)} onDelete={() => {}} />
+              <Profile
+                onUpdateInfo={() => setShowUserInfoModal(true)}
+                onDelete={() => {
+                  setShowUserDeleteModal(true);
+                }}
+              />
             </div>
           </Col>
         </Row>

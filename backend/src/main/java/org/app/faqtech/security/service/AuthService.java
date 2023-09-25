@@ -4,10 +4,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.app.faqtech.context.AuthContext;
 import org.app.faqtech.dto.auth.AuthResponse;
-import org.app.faqtech.dto.auth.ChangeCredentialsRequest;
+import org.app.faqtech.dto.auth.UserUpdateRequest;
 import org.app.faqtech.dto.auth.LoginRequest;
 import org.app.faqtech.dto.auth.RegisterRequest;
 import org.app.faqtech.entity.Role;
@@ -56,7 +57,7 @@ public class AuthService {
         return new AuthResponse(token);
     }
 
-    public AuthResponse changeCredentials(ChangeCredentialsRequest request) {
+    public AuthResponse updateUserInfo(UserUpdateRequest request) {
         User currentUser = authContext.getLoggedInUser();
 
         // Verify the current password
@@ -70,16 +71,16 @@ public class AuthService {
         }
 
         // Update username if provided and ensure it's unique
-        if (request.newUsername() != null && !request.newUsername().isEmpty()) {
+        if (request.newUsername() != null && !request.newUsername().isEmpty() && !Objects.equals(request.newUsername(), currentUser.getUsername())) {
             boolean existsByUsername = userRepository.existsByUsername(request.newUsername());
-            if (existsByUsername) {
+            if (request.newUsername().equals(currentUser.getUsername()) && existsByUsername) {
                 throw new ConflictException("Username already exists.");
             }
             currentUser.setUsername(request.newUsername());
         }
 
         // Update email if provided and ensure it's unique
-        if (request.newEmail() != null && !request.newEmail().isEmpty()) {
+        if (request.newEmail() != null && !request.newEmail().isEmpty() && !Objects.equals(request.newEmail(), currentUser.getEmail())) {
             boolean existsByEmail = userRepository.existsByEmail(request.newEmail());
             if (existsByEmail) {
                 throw new ConflictException("Email already exists.");

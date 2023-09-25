@@ -47,7 +47,7 @@ public class UserController {
 
     @DeleteMapping("/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize(value = "hasRole('USER')")
+    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
     public void softDeleteLoggedInUser() {
         userService.softDeleteLoggedInUser();
     }

@@ -7,9 +7,9 @@ interface AnswerProps extends CardProps {
   answer: IAnswer;
 }
 
-const Answer: React.FC<AnswerProps> = ({ answer, className, border }) => {
+const Answer: React.FC<AnswerProps> = ({ id, answer, className, border }) => {
   return (
-    <Card as="div" className={`shadow ${className}`} border={border}>
+    <Card id={id} as="div" className={`shadow ${className}`} border={border}>
       <Card.Body>
         <blockquote className="blockquote mb-0">
           <p> {answer.text} </p>

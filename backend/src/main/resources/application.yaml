@@ -18,3 +18,5 @@ spring:
   output:
     ansi:
       enabled: always
+app:
+  base-url: ${BASE_URL}
