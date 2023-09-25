@@ -7,10 +7,14 @@ import { IQuestion } from "../types/models";
 import Question from "../components/Question";
 import SearchForm from "../components/SearchForm";
 import Answer from "../components/Answer";
+import AnswerModal from "../components/AnswerModal";
+import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 const QuestionDetailsPage = () => {
   const { id } = useParams();
-
+  const [showModal, setShowModal] = useState(false);
+  const { user } = useAuth();
   const {
     data: question,
     isLoading,
@@ -27,30 +31,29 @@ const QuestionDetailsPage = () => {
   }
 
   return (
-    <Container as={`section`} className="my-5">
-      <Row className="justify-content-center">
-        {/* Questions Column */}
-        <Col md={12} lg={7} className="d-flex flex-column justify-content-center h-100">
-          <div className="sticky-top" style={{ paddingTop: "5rem" }}>
-            <Question question={question} className="h-100" />
-          </div>
-        </Col>
-
-        {/* Top Questions Column */}
-        <Col lg={5}>
-          <div className="sticky-top bg-body " style={{ paddingTop: "5rem" }}>
-            <Button variant="primary" className="w-100 mb-3">
-              <Plus /> Answer the Question
-            </Button>
-            <SearchForm title="Search Answers" className="mb-3" />
-          </div>
-          <Stack className="scrollable-questions my-3">
-            {Array.isArray(question.answers) &&
-              question.answers.map((answer) => <Answer key={answer.id} answer={answer} />)}
-          </Stack>
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <AnswerModal question={question} show={showModal} onHide={() => setShowModal(false)} size="xl" />
+      <Container as={`section`} className="my-5">
+        <Row className="justify-content-center">
+          {/* Top Questions Column */}
+          <Col lg={10}>
+            <div className="sticky-top bg-body " style={{ paddingTop: "5rem" }}>
+              <Question question={question} className="mb-3 h-100" />
+              <Button variant="primary" className="w-100 mb-3" onClick={() => setShowModal(true)}>
+                <Plus /> Answer the Question
+              </Button>
+              <SearchForm title="Search Answers" className="mb-3" />
+            </div>
+            <Stack className="scrollable-questions my-3" gap={3}>
+              {Array.isArray(question.answers) &&
+                question.answers.map((answer) => (
+                  <Answer key={answer.id} answer={answer} border={`${answer.user.id === user?.id && "primary"}`} />
+                ))}
+            </Stack>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 

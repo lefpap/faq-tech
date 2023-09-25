@@ -1,18 +1,15 @@
 import { Button, Card, CardProps, Table } from "react-bootstrap";
-import { IUser } from "../types/models";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { Retryer } from "react-query/types/core/retryer";
-import { useQueries, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { getUser } from "../api/users";
-import { CloudSlash } from "react-bootstrap-icons";
 
 interface ProfileProps extends CardProps {
-  onChangeCredentials: () => void;
   onUpdateInfo: () => void;
+  onDelete: () => void;
 }
 
-const Profile: React.FC<ProfileProps> = ({ className, onChangeCredentials, onUpdateInfo }) => {
+const Profile: React.FC<ProfileProps> = ({ className, onDelete, onUpdateInfo }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
   if (!user) {
@@ -67,8 +64,8 @@ const Profile: React.FC<ProfileProps> = ({ className, onChangeCredentials, onUpd
         <Button size="sm" variant="secondary" className="w-100" onClick={onUpdateInfo}>
           Update Info
         </Button>
-        <Button size="sm" variant="outline-secondary" className="w-100" onClick={onChangeCredentials}>
-          Change Credentials
+        <Button size="sm" variant="danger" className="w-100" onClick={onDelete}>
+          Delete
         </Button>
       </Card.Footer>
     </Card>

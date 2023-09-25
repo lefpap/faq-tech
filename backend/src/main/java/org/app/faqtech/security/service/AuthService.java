@@ -87,8 +87,24 @@ public class AuthService {
             currentUser.setEmail(request.newEmail());
         }
 
+        // Update firstname if present
+        if (request.newFirstname() != null && !request.newFirstname().isEmpty()) {
+            currentUser.setFirstname(request.newFirstname());
+        }
+
+        // Update lastname if present
+        if (request.newLastname() != null && !request.newLastname().isEmpty()) {
+            currentUser.setLastname(request.newLastname());
+        }
+
+        // Update simplePushKey if present
+        currentUser.setSimplePushKey(request.newFirstname());
+
+        // Save updated user to db
         userRepository.save(currentUser);
 
+
+        // Generate new token
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("id", currentUser.getId());
         extraClaims.put("role", currentUser.getRole());

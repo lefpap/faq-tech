@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useState } from "react";
-import { ICredentialsChange, TCredentials } from "../types/auth";
+import { IUpdateUserInfo, TCredentials } from "../types/auth";
 import { useMutation } from "react-query";
-import { changeCredentials, loginUser, registerUser } from "../api/auth";
+import { updateUser, loginUser, registerUser } from "../api/auth";
 import { extractToken, isTokenValid } from "../utils/auth";
 import { IUser } from "../types/models";
 
@@ -14,7 +14,7 @@ interface IAuthState {
 interface IAuthContext extends IAuthState {
   login: (credentials: TCredentials) => Promise<any>;
   register: (registerData: any) => Promise<any>;
-  credentialsChange: (credentials: any) => Promise<any>;
+  updateUserInfo: (request: IUpdateUserInfo) => Promise<any>;
   logout: () => void;
 }
 
@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const loginMutation = useMutation(loginUser);
   const registerMutation = useMutation(registerUser);
-  const changeCrdentialsMutation = useMutation(changeCredentials);
+  const updateUserMutation = useMutation(updateUser);
 
   const login = async (credentials: TCredentials) => {
     try {
@@ -112,9 +112,9 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
-  const credentialsChange = async (credentials: ICredentialsChange) => {
+  const updateUserInfo = async (credentials: IUpdateUserInfo) => {
     try {
-      const data = await changeCrdentialsMutation.mutateAsync(credentials);
+      const data = await updateUserMutation.mutateAsync(credentials);
       const decoded = extractToken(data.token);
 
       if (!decoded) {
@@ -154,7 +154,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, register, credentialsChange }}>
+    <AuthContext.Provider value={{ ...state, login, logout, register, updateUserInfo }}>
       {children}
     </AuthContext.Provider>
   );

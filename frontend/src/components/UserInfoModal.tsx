@@ -1,60 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, FloatingLabel, Modal, ModalProps, Toast } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
-import { useMutation, useQueryClient } from "react-query";
-import { updateUserInfo } from "../api/users";
 
 interface UserInfoModalProps extends ModalProps {}
 
 const UserInfoModal: React.FC<UserInfoModalProps> = ({ show, onHide }) => {
   //   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user, updateUserInfo } = useAuth();
   const [alert, setAlert] = useState(false);
 
   // Form elements
-  const [firstname, setFirstname] = useState<string>("");
-  const [lastname, setLastname] = useState<string>("");
-  const [simplePushKey, setSimplePushkey] = useState<string>("");
+  const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [newUsername, setNewUsername] = useState<string>("");
+  const [newEmail, setNewEmail] = useState<string>("");
+  const [newFirstname, setNewFirstname] = useState<string>("");
+  const [newLastname, setNewLastname] = useState<string>("");
+  const [newSimplePushKey, setNewSimplePushkey] = useState<string>("");
   const [validated, setValidated] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
 
-  const queryClient = useQueryClient();
-  const updateUserInfoMutation = useMutation(updateUserInfo, {
-    onSuccess: () => {
-      // set form elments to default values
-      setFirstname("");
-      setLastname("");
-      setSimplePushkey("");
-
-      // invalidate the queries
-      queryClient.invalidateQueries(["users", "me"]);
-
-      // display a success alert to the user
-      setAlert(true);
-
-      // hide modal
-      onHide?.();
-    },
-    onError: (error: Error) => {
-      // Handle error
-      setError(error.message);
-    },
-  });
+  useEffect(() => {
+    if (user) {
+      setNewUsername(user.username);
+      setNewEmail(user.email);
+      setNewFirstname(user.firstname);
+      setNewLastname(user.lastname);
+      setNewSimplePushkey(user.simplePushKey ? user.simplePushKey : "NA");
+    }
+  }, [user]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
     const value = event.target.value;
 
     switch (name) {
-      case "firstname":
-        setFirstname(value);
+      case "currentPassword":
+        setCurrentPassword(value);
         break;
-      case "lastname":
-        setLastname(value);
+      case "newPassword":
+        setNewPassword(value);
         break;
-      case "simplePushKey":
-        setSimplePushkey(value);
+      case "newUsername":
+        setNewUsername(value);
+        break;
+      case "newEmail":
+        setNewEmail(value);
+        break;
+      case "newFirstname":
+        setNewFirstname(value);
+        break;
+      case "newLastname":
+        setNewLastname(value);
+        break;
+      case "newSimplePushKey":
+        setNewSimplePushkey(value);
         break;
       default:
         throw new Error("Invalid input name");
@@ -77,16 +78,19 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ show, onHide }) => {
       return;
     }
 
-    if (firstname.trim() === "" && lastname.trim() === "" && simplePushKey.trim() === "") {
-      onHide?.();
-      return;
+    try {
+      updateUserInfo({
+        currentPassword,
+        newPassword,
+        newUsername,
+        newEmail,
+        newFirstname,
+        newLastname,
+        newSimplePushKey,
+      });
+    } catch (error) {
+      setError("Error updating user info");
     }
-
-    updateUserInfoMutation.mutate({
-      firstname,
-      lastname,
-      simplePushKey,
-    });
   };
 
   return (
@@ -112,33 +116,85 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ show, onHide }) => {
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3">
-              <FloatingLabel controlId="firstname" label="Firstname">
+              <FloatingLabel controlId="currentPassword" label="Current Password">
                 <Form.Control
-                  type="text"
-                  placeholder="Write first here"
-                  value={firstname}
+                  type="password"
+                  placeholder="Write password here"
+                  value={currentPassword}
                   onChange={handleInputChange}
-                  name="firstname"
+                  name="currentPassword"
+                  required
+                />
+                <Form.Control.Feedback type="invalid">Password is empty</Form.Control.Feedback>
+              </FloatingLabel>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <FloatingLabel controlId="newPassword" label="New Password">
+                <Form.Control
+                  type="password"
+                  placeholder="Write password here"
+                  value={newPassword}
+                  onChange={handleInputChange}
+                  name="newPassword"
                 />
               </FloatingLabel>
             </Form.Group>
             <Form.Group className="mb-3">
-              <FloatingLabel controlId="lasname" label="Lastname">
+              <FloatingLabel controlId="newUsername" label="New Username">
+                <Form.Control
+                  placeholder="Write username here"
+                  value={newUsername}
+                  onChange={handleInputChange}
+                  name="newUsername"
+                  required
+                />
+                <Form.Control.Feedback type="invalid">Username is empty</Form.Control.Feedback>
+              </FloatingLabel>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <FloatingLabel controlId="newEmail" label="New Email">
+                <Form.Control
+                  type="email"
+                  placeholder="Write email here"
+                  value={newEmail}
+                  onChange={handleInputChange}
+                  name="newEmail"
+                  required
+                />
+                <Form.Control.Feedback type="invalid">Email is empty</Form.Control.Feedback>
+              </FloatingLabel>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <FloatingLabel controlId="newFirstname" label="New Firstname">
+                <Form.Control
+                  placeholder="Write firstname here"
+                  value={newFirstname}
+                  onChange={handleInputChange}
+                  name="newFirstname"
+                  required
+                />
+                <Form.Control.Feedback type="invalid">Firstname is empty</Form.Control.Feedback>
+              </FloatingLabel>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <FloatingLabel controlId="newLastname" label="New Lastname">
                 <Form.Control
                   placeholder="Write lastname here"
-                  value={lastname}
+                  value={newLastname}
                   onChange={handleInputChange}
-                  name="lastname"
+                  name="newLastname"
+                  required
                 />
+                <Form.Control.Feedback type="invalid">Lastname is empty</Form.Control.Feedback>
               </FloatingLabel>
             </Form.Group>
             <Form.Group className="mb-3">
-              <FloatingLabel controlId="simplePushKey" label="SimplePush Key">
+              <FloatingLabel controlId="newSimplePushKey" label="New SimplePush Key">
                 <Form.Control
                   placeholder="Write simple push key here"
-                  value={simplePushKey}
+                  value={newSimplePushKey}
                   onChange={handleInputChange}
-                  name="simplePushKey"
+                  name="newSimplePushKey"
                 />
               </FloatingLabel>
             </Form.Group>

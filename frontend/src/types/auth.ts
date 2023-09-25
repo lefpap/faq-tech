@@ -3,11 +3,14 @@ export type TCredentials = {
   password: string;
 };
 
-export interface ICredentialsChange {
+export interface IUpdateUserInfo {
   currentPassword: string;
   newPassword?: string;
   newUsername?: string;
   newEmail?: string;
+  newFirstname?: string;
+  newLastname?: string;
+  newSimplePushKey?: string;
 }
 
 export type TRegister = {

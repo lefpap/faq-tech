@@ -8,7 +8,6 @@ import { Plus } from "react-bootstrap-icons";
 import SearchForm from "../components/SearchForm";
 import { useState } from "react";
 import QuestionModal from "../components/QuestionModal";
-import CredentialsModal from "../components/CredentialsModal";
 import UserInfoModal from "../components/UserInfoModal";
 
 const ProfilePage = () => {
@@ -20,7 +19,6 @@ const ProfilePage = () => {
   const { data: questions } = useQuery(["questions", user.id], fetchUserQuestions);
 
   const [showQuestionModal, setShowQuestionModal] = useState(false);
-  const [showCredentialsModal, setShowCredentialsModal] = useState(false);
   const [showUserInfoModal, setShowUserInfoModal] = useState(false);
 
   const handleAskQuestion = () => {
@@ -35,7 +33,6 @@ const ProfilePage = () => {
   return (
     <>
       <QuestionModal show={showQuestionModal} onHide={() => setShowQuestionModal(false)} size="xl" />
-      <CredentialsModal show={showCredentialsModal} onHide={() => setShowCredentialsModal(false)} />
       <UserInfoModal show={showUserInfoModal} onHide={() => setShowUserInfoModal(false)} />
 
       <Container as={`section`} className="my-5">
@@ -54,10 +51,7 @@ const ProfilePage = () => {
           {/* Profile Column */}
           <Col lg={5} className="order-1 order-lg-2">
             <div className="sticky-top" style={{ paddingTop: "5rem" }}>
-              <Profile
-                onChangeCredentials={() => setShowCredentialsModal(true)}
-                onUpdateInfo={() => setShowUserInfoModal(true)}
-              />
+              <Profile onUpdateInfo={() => setShowUserInfoModal(true)} onDelete={() => {}} />
             </div>
           </Col>
         </Row>

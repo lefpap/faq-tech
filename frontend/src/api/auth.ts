@@ -1,4 +1,4 @@
-import { ICredentialsChange, TCredentials, TRegister } from "../types/auth";
+import { IUpdateUserInfo, TCredentials, TRegister } from "../types/auth";
 import axios from "./index";
 
 export const loginUser = async (credentials: TCredentials) => {
@@ -31,10 +31,10 @@ export const registerUser = async (userInfo: TRegister) => {
   }
 };
 
-export const changeCredentials = async (credentials: ICredentialsChange) => {
+export const updateUser = async (request: IUpdateUserInfo) => {
   try {
     console.log("On change credentials: ", localStorage.getItem("token"));
-    const response = await axios.put("/auth/update", credentials);
+    const response = await axios.put("/auth/update", request);
     return response.data;
   } catch (error) {
     throw error;
