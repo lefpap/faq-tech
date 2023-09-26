@@ -11,6 +11,16 @@ export const fetchQuestions = async (): Promise<IQuestion[]> => {
   }
 };
 
+export const fetchTopQuestions = async ({ queryKey }: QueryFunctionContext): Promise<IQuestion[]> => {
+  const [, , limit] = queryKey;
+  try {
+    const response = await axios.get<IQuestion[]>(`/questions/top/${limit}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const fetchQuestionWithId = async ({ queryKey }: QueryFunctionContext): Promise<IQuestion> => {
   const [, id] = queryKey;
   try {

@@ -8,6 +8,7 @@ import org.app.faqtech.entity.Question;
 import org.app.faqtech.entity.User;
 import org.app.faqtech.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class QuestionService {
 
 
     public List<Question> getQuestions() {
-        return questionRepository.findAll();
+        return questionRepository.findAll(Sort.by(Sort.Order.desc("createdAt")));
     }
 
     public Question getQuestion(Long id) {
@@ -34,7 +35,7 @@ public class QuestionService {
     }
 
     public List<Question> getQuestionsFromUser(Long userId) {
-        return questionRepository.findAllByUserId(userId);
+        return questionRepository.findAllByUserId(userId, Sort.by(Sort.Order.desc("createdAt")));
     }
 
 
@@ -52,5 +53,13 @@ public class QuestionService {
     public void deleteQuestion(Long id) {
         Question question = getQuestion(id);
         questionRepository.delete(question);
+    }
+
+    public List<Question> getTopQuestions(Integer limit) {
+
+        // Define sorting and pagination
+        PageRequest pageRequest = PageRequest.ofSize(limit);
+
+        return questionRepository.findTopQuestions(pageRequest);
     }
 }

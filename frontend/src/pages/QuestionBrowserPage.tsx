@@ -34,9 +34,6 @@ function QuestionBrowserPage() {
     return <div>Error fetching data</div>;
   }
 
-  // For top questions, shuffle and take the first 3
-  const topQuestions = questions?.slice(0, 3);
-
   return (
     <>
       <QuestionModal show={showModal} onHide={() => setShowModal(false)} size="xl" />
@@ -57,7 +54,7 @@ function QuestionBrowserPage() {
           {/* Top Questions Column */}
           <Col md={4} className="d-none d-lg-block">
             <div className="sticky-top" style={{ paddingTop: "5rem" }}>
-              <TopQuestions questions={topQuestions} />
+              <TopQuestions limit={8} />
             </div>
           </Col>
         </Row>

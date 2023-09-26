@@ -46,7 +46,7 @@ const ProfilePage = () => {
               <Button variant="primary" className="w-100 mb-3" onClick={handleAskQuestion}>
                 <Plus /> Ask a Question
               </Button>
-              <SearchForm title="Search Answers" className="mb-3" />
+              <SearchForm title="Search Questions" className="mb-3" />
             </div>
             <QuestionsList gap={3} questions={questions} />
           </Col>

@@ -1,7 +1,7 @@
 import { Navbar, Nav, Container, Dropdown, Form, Button } from "react-bootstrap";
 import { SunFill, MoonFill } from "react-bootstrap-icons";
 import { useTheme } from "../contexts/ThemeContext";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 const ProfileDropdown = () => {
@@ -52,7 +52,7 @@ function NavBar() {
   return (
     <Navbar fixed="top" expand="md" bg={theme}>
       <Container fluid="sm">
-        <Navbar.Brand className="fw-bold fs-3" href="#home">
+        <Navbar.Brand as={Link} to="/" className="fw-bold fs-3">
           FAQTech.
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="menu" />
@@ -64,9 +64,6 @@ function NavBar() {
             </Nav.Link>
             <Nav.Link as={NavLink} to="/about">
               About
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/help">
-              Help
             </Nav.Link>
           </Nav>
 

@@ -35,6 +35,11 @@ public class QuestionController {
         return QuestionResponse.fromEntities(questionService.getQuestionsFromUser(id));
     }
 
+    @GetMapping("/top/{limit}")
+    public List<QuestionResponse> getTopQuestions(@PathVariable("limit") Integer limit) {
+        return QuestionResponse.fromEntities(questionService.getTopQuestions(limit));
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize(value = "hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
