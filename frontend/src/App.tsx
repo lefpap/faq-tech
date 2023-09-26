@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppLayout from "./layout/AppLayout";
 import QuestionBrowserPage from "./pages/QuestionBrowserPage";
 import AboutPage from "./pages/AboutPage";
-import HelpPage from "./pages/HelpPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import LoginPage from "./pages/LoginPage";
 import QuestionDetailsPage from "./pages/QuestionDetailsPage";
@@ -58,10 +57,6 @@ const router = createBrowserRouter([
       {
         path: "about",
         element: <AboutPage />,
-      },
-      {
-        path: "help",
-        element: <HelpPage />,
       },
     ],
   },

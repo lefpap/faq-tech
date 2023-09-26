@@ -22,7 +22,7 @@ const UserDeleteModal: React.FC<UserDeleteModalProps> = ({ show, onHide }) => {
       setShowToast(true);
       logout();
     },
-    onError: (error) => {
+    onError: () => {
       setError("Something went wrong!");
     },
   });

@@ -1,5 +1,5 @@
 # Use the official Maven image as the base image
-FROM maven:3.9.2-amazoncorretto-17
+FROM maven:3.9.2-amazoncorretto-17 AS build
 
 # Set the working directory in the container
 WORKDIR /app
