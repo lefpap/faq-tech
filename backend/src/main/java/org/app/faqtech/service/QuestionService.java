@@ -44,9 +44,13 @@ public class QuestionService {
         User user = userService.getUser(request.userId());
         Question question = request.toEntity(user);
         questionRepository.save(question);
-
-        String questionUrl = "Find question at: " + baseUrl + "/questions/details/%d".formatted(question.getId());
-        notificationService.sendNotification(user.getSimplePushKey(), question.getTitle(), questionUrl);
+        
+        try {
+            String questionUrl = "Find question at: " + baseUrl + "/questions/details/%d".formatted(question.getId());
+            notificationService.sendNotification(user.getSimplePushKey(), question.getTitle(), questionUrl);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Transactional

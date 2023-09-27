@@ -44,8 +44,13 @@ public class AnswerService {
 
         Answer createdAnswer = answerRepository.save(answer);
         
-        String answerUrl = baseUrl + "/questions/details/%d#answer-%d".formatted(question.getId(), createdAnswer.getId());
-        notificationService.sendNotification(user.getSimplePushKey(), "REPLY:%s".formatted(question.getTitle()), "You can find the answer here: %s".formatted(answerUrl));
+        try {
+            String answerUrl = baseUrl + "/questions/details/%d#answer-%d".formatted(question.getId(), createdAnswer.getId());
+            notificationService.sendNotification(user.getSimplePushKey(), "REPLY:%s".formatted(question.getTitle()), "You can find the answer here: %s".formatted(answerUrl));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
         return createdAnswer;
     }
 
