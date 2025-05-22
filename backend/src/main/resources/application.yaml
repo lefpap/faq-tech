@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/faqtech
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  security:
+    user:
+      name: user
+      password: test123
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  sql:
+    init:
+      mode: always
+  output:
+    ansi:
+      enabled: always
+app:
+  base-url: ${BASE_URL}
